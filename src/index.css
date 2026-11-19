@@ -316,3 +316,13 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .lb-prev { left: 0.5rem; }
   .lb-next { right: 0.5rem; }
 }
+
+/* phone: tighter price tables */
+@media (max-width: 600px) {
+  .price-card thead th { font-size: 0.75rem; padding-top: 0.7rem; padding-bottom: 0.7rem; }
+  .price-card tbody th { font-size: 0.82rem; line-height: 1.35; padding-top: 0.55rem; padding-bottom: 0.55rem; }
+  .price-card td { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+  .price { font-size: 0.78rem; padding: 0.1rem 0.6rem; border-width: 1.5px; }
+  .price-soft { font-size: 0.7rem; padding: 0.1rem 0.5rem; }
+  .price-note { font-size: 0.8rem; }
+}
