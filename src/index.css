@@ -100,8 +100,23 @@ a.icon-btn:hover, button.icon-btn:hover { transform: translate(2px, 2px); box-sh
 .brief-template { white-space: pre-wrap; background: var(--card); border: 2px dashed var(--line); border-radius: 14px; padding: 1rem; font: inherit; margin: 1rem 0; }
 
 /* galleries */
-.gallery-label { text-align: center; margin: 2rem 0 0.5rem; font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
-.gallery { list-style: none; padding: 0; margin: 1rem 0 0; columns: 3 200px; column-gap: 12px; }
+.gallery-label {
+  width: fit-content;
+  max-width: 100%;
+  margin: 3rem auto 1rem;
+  padding: 0.6rem 1.6rem;
+  background: var(--yellow);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--line);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.gallery-label.pink { background: var(--salmon); }.gallery { list-style: none; padding: 0; margin: 1rem 0 0; columns: 3 200px; column-gap: 12px; }
 .gallery li { break-inside: avoid; margin: 0 0 12px; }
 .gallery button { display: block; width: 100%; padding: 0; border: 2px solid var(--line); border-radius: 12px; overflow: hidden; background: none; cursor: zoom-in; transition: transform .15s; }
 .gallery button:hover { transform: scale(1.02); }

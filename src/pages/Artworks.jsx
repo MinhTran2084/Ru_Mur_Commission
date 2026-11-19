@@ -9,10 +9,10 @@ export default function Artworks() {
       <BackButton to="/" />
       <h1 className="section-title">Artworks</h1>
 
-      <h2 className="gallery-label">Personal project</h2>
+      <h2 className="gallery-label yellow">Personal project</h2>
       <Gallery images={personalProject} label="Personal project" />
 
-      <h2 className="gallery-label">Sample</h2>
+      <h2 className="gallery-label pink">Sample</h2>
       <Gallery images={sample} label="Sample" />
 
       <PageNav to="/" />
