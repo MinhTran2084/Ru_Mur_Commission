@@ -142,8 +142,7 @@ a.icon-btn:hover, button.icon-btn:hover { transform: translate(2px, 2px); box-sh
 .donate-img { display: block; width: 100%; height: auto; margin: 1.75rem 0 0; border: 2px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
 .container > .section-title:first-child { margin-top: 2rem; }
 /* floating bubbles */
-.bubbles { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.bubble {
+.bubbles { position: fixed; inset: 0 var(--scrollbar, 0px) 0 0; z-index: -1; overflow: hidden; pointer-events: none; }.bubble {
   position: absolute;
   bottom: -80px;
   border-radius: 50%;
@@ -183,4 +182,88 @@ a.icon-btn:hover, button.icon-btn:hover { transform: translate(2px, 2px); box-sh
 @media (prefers-reduced-motion: reduce) {
   .container > :not(.lightbox),
   .home > * { animation: none; }
+}
+
+/* gallery thumbnails fade up one after another */
+.container > .gallery { animation: none; }
+.gallery li {
+  animation: rise-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+.gallery button:active { transform: scale(0.97); }
+
+/* image viewer: open, switch and close */
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lb-in {
+  from { opacity: 0; transform: translateX(calc(var(--dir, 0) * 48px)) scale(0.94); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+.lightbox { animation: fade-in 0.25s ease-out; backdrop-filter: blur(6px); }
+.lb-img { animation: lb-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lightbox.is-closing { animation: none; opacity: 0; transition: opacity 0.2s ease-in; }
+.lightbox.is-closing .lb-img { animation: none; transform: scale(0.96); transition: transform 0.2s ease-in; }
+
+/* press feedback */
+.big-card:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--line); }
+a.icon-btn:active, button.icon-btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--line); }
+
+/* price rows light up on hover */
+.price-card tbody tr { transition: background 0.2s; }
+.price-card tbody tr:hover { background: rgba(240, 234, 140, 0.35); }
+
+/* avatar floats gently */
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+.home > .avatar {
+  animation:
+    rise-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards,
+    bob 5s ease-in-out 0.6s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery li, .lightbox, .lb-img, .home > .avatar { animation: none; }
+  .lightbox.is-closing, .lightbox.is-closing .lb-img { transition: none; }
+}
+
+/* the viewer must never inherit the page-entrance delay */
+.container > .lightbox { animation-delay: 0s; }
+
+
+/* image viewer slider */
+@keyframes lb-pop {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.lightbox { --shift: 25vw; } /* how far images travel while fading */
+.lb-track { position: absolute; inset: 0; touch-action: pan-y; animation: lb-pop 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* the image that is leaving: fades out fast */
+.lightbox .lb-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  animation: none;
+  opacity: 0;
+  transform:
+    translate(-50%, -50%)
+    translateX(calc(var(--off) * var(--shift)))
+    scale(calc(1 - var(--off) * var(--off) * 0.05));
+  transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.2, 1), opacity 0.18s ease-out;
+}
+
+/* the image that is arriving: waits a moment, then fades in */
+.lightbox .lb-img.is-current {
+  opacity: 1;
+  transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.2, 1), opacity 0.3s ease-out 0.12s;
+}
+
+.lightbox.is-closing .lb-track { animation: none; opacity: 0; transform: scale(0.96); transition: opacity 0.2s ease-in, transform 0.2s ease-in; }
+.lightbox.is-closing .lb-img { transition: none; }
+.lb-btn { z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-track { animation: none; }
+  .lightbox .lb-img { transition: none; }
 }
