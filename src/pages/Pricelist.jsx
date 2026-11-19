@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import BackButton from '../components/BackButton'
+import PageNav from '../components/PageNav'
 import PriceTable from '../components/PriceTable'
 import { Terms, Workflow } from '../components/Info'
 import { pricing } from '../data/pricing'
@@ -28,6 +29,8 @@ export default function Pricelist() {
 
       <h2 className="section-title">Workflow</h2>
       <Workflow />
+
+      <PageNav to="/" />
     </main>
   )
 }

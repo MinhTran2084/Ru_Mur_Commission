@@ -1,4 +1,5 @@
 import BackButton from '../components/BackButton'
+import PageNav from '../components/PageNav'
 import Gallery from '../components/Gallery'
 import { personalProject, sample } from '../data/galleries'
 
@@ -13,6 +14,8 @@ export default function Artworks() {
 
       <h2 className="gallery-label">Sample</h2>
       <Gallery images={sample} label="Sample" />
+
+      <PageNav to="/" />
     </main>
   )
 }

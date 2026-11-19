@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export default function Gallery({ images, label }) {
+export default function Gallery({ images, label, stack = false }) {
   const [open, setOpen] = useState(null)
   const count = images.length
   const isOpen = open !== null
@@ -29,7 +29,7 @@ export default function Gallery({ images, label }) {
 
   return (
     <>
-      <ul className="gallery">
+      <ul className={stack ? 'gallery gallery-stack' : 'gallery'}>
         {images.map((img, i) => (
           <li key={img.url}>
             <button type="button" onClick={() => setOpen(i)}>
