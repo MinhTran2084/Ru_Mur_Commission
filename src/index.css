@@ -161,3 +161,26 @@ a.icon-btn:hover, button.icon-btn:hover { transform: translate(2px, 2px); box-sh
 @media (prefers-reduced-motion: reduce) {
   .bubble { animation: none; bottom: auto; top: var(--top); opacity: 0.8; }
 }
+
+/* page entrance animation */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.container > :not(.lightbox),
+.home > * {
+  animation: rise-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+/* stagger: each block starts a little after the previous one */
+.container > :nth-child(2), .home > :nth-child(2) { animation-delay: 0.08s; }
+.container > :nth-child(3), .home > :nth-child(3) { animation-delay: 0.16s; }
+.container > :nth-child(4), .home > :nth-child(4) { animation-delay: 0.24s; }
+.container > :nth-child(5), .home > :nth-child(5) { animation-delay: 0.32s; }
+.container > :nth-child(n+6), .home > :nth-child(n+6) { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .container > :not(.lightbox),
+  .home > * { animation: none; }
+}
