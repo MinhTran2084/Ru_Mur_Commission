@@ -267,3 +267,52 @@ a.icon-btn:active, button.icon-btn:active { transform: translate(3px, 3px); box-
   .lb-track { animation: none; }
   .lightbox .lb-img { transition: none; }
 }
+
+
+/* ---------- mobile ---------- */
+
+/* gradient on its own fixed layer (background-attachment: fixed is unreliable on phones) */
+body { background: none; }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(180deg, var(--pink), var(--cyan));
+}
+
+html { overflow-x: clip; }
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* long words (like "Keyring/Badge/Standee/Sticker...") wrap instead of pushing the layout wider */
+.price-card tbody th { overflow-wrap: anywhere; }
+.terms li, .steps li, .brief { overflow-wrap: anywhere; }
+
+/* touch screens: no sticky hover effects after a tap */
+@media (hover: none) {
+  .big-card:hover { transform: none; box-shadow: var(--shadow); }
+  a.icon-btn:hover, button.icon-btn:hover { transform: none; box-shadow: 3px 3px 0 var(--line); }
+  .gallery button:hover { transform: none; }
+}
+
+@media (max-width: 600px) {
+  .home { padding-top: 2rem; }
+  .avatar { width: min(230px, 62vw); }
+  .tagline { margin-bottom: 2rem; }
+  .big-buttons { gap: 1.1rem; }
+  .big-card { min-height: 7rem; padding: 1.1rem; }
+  .icon-row { margin-top: 2rem; }
+
+  .section-title { margin: 2.5rem 0 1.1rem; padding: 1rem 0.75rem; box-shadow: 4px 4px 0 var(--line); }
+  .price-card thead th, .price-card tbody th, .price-card td { padding-left: 0.8rem; padding-right: 0.8rem; }
+  .price-card tbody th, .price-card td { padding-top: 0.6rem; padding-bottom: 0.6rem; font-size: 0.9rem; }
+  .terms li { padding-left: 2.3rem; font-size: 0.92rem; }
+  .terms li::before { left: 0.8rem; }
+  .steps li { font-size: 0.92rem; }
+  .gallery-label { margin-top: 2.25rem; }
+
+  .lightbox .lb-img { max-height: 84dvh; }
+  .lb-btn { width: 2.6rem; height: 2.6rem; }
+  .lb-prev { left: 0.5rem; }
+  .lb-next { right: 0.5rem; }
+}
