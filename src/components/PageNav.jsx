@@ -1,12 +1,10 @@
-import { Link } from 'react-router-dom'
-import { FaArrowLeft, FaArrowUp } from 'react-icons/fa6'
+import { FaArrowUp } from 'react-icons/fa6'
+import BackLink from './BackLink'
 
 export default function PageNav({ to = '/' }) {
   return (
     <div className="page-nav">
-      <Link to={to} className="icon-btn" aria-label="Quay lại">
-        <FaArrowLeft />
-      </Link>
+      <BackLink to={to} />
       <button
         type="button"
         className="icon-btn"

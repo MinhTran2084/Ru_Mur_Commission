@@ -1,10 +1,5 @@
-import { Link } from 'react-router-dom'
-import { FaArrowLeft } from 'react-icons/fa6'
+import BackLink from './BackLink'
 
 export default function BackButton({ to = '/' }) {
-  return (
-    <Link to={to} className="icon-btn back-btn" aria-label="Quay lại">
-      <FaArrowLeft />
-    </Link>
-  )
+  return <BackLink to={to} className="icon-btn back-btn" />
 }

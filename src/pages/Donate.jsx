@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import { FaArrowLeft } from 'react-icons/fa6'
+import BackLink from '../components/BackLink'
 import { donate } from '../data/galleries'
 
 export default function Donate() {
@@ -10,9 +9,7 @@ export default function Donate() {
         <img className="donate-img" src={donate[0].url} alt="Mã QR chuyển tiền" />
       )}
       <div className="page-nav">
-        <Link to="/" className="icon-btn" aria-label="Quay lại">
-          <FaArrowLeft />
-        </Link>
+        <BackLink to="/" />
       </div>
     </main>
   )
