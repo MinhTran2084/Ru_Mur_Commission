@@ -48,8 +48,7 @@ a { color: #4a6fb5; }
 
 /* home screen */
 .home { max-width: 560px; margin: 0 auto; padding: 3rem clamp(1.25rem, 6vw, 2.5rem); text-align: center; }
-.avatar { display: block; width: min(280px, 70vw); aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 6px solid var(--line); margin: 0 auto 1.25rem; }
-.home-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.2rem, 9vw, 3.4rem); text-transform: uppercase; margin: 0; }
+.avatar { display: block; width: min(280px, 70vw); aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 7px solid var(--line); box-shadow: 7px 7px 0 var(--line); margin: 0 auto 1.75rem; }.home-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.2rem, 9vw, 3.4rem); text-transform: uppercase; margin: 0; }
 .tagline { margin: 1rem 0 2.5rem; color: var(--ink-soft); letter-spacing: 0.15em; text-transform: uppercase; }
 
 .big-buttons { display: grid; gap: 1.5rem; }
