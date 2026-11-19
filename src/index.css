@@ -139,8 +139,8 @@ a.icon-btn:hover, button.icon-btn:hover { transform: translate(2px, 2px); box-sh
 .lb-prev { left: 1rem; top: 50%; transform: translateY(-50%); }
 .lb-next { right: 1rem; top: 50%; transform: translateY(-50%); }
 
-.donate-img { display: block; max-width: 280px; width: 100%; margin: 1rem auto; border-radius: 14px; border: 2px solid var(--line); }
-
+.donate-img { display: block; width: 100%; height: auto; margin: 1.75rem 0 0; border: 2px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+.container > .section-title:first-child { margin-top: 2rem; }
 /* floating bubbles */
 .bubbles { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .bubble {
