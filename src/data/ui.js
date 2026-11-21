@@ -17,7 +17,7 @@ export const ui = {
   comingSoon: { vi: 'Sắp ra mắt', en: 'Coming soon' },
   projectWorkflow: { vi: 'Quy trình', en: 'Workflow' },
   noStages: { vi: 'Chưa có các bước thực hiện.', en: 'No workflow stages yet.' },
-  donateTitle: { vi: 'Mời bọn mình một ly cà phê nhé? :)', en: 'Buy us a coffee? :)' },
+  donateTitle: { vi: 'Ủng hộ nhà sáng tạo nhỏ', en: 'BUY US A COFFEE NO? :)' },
   qrSoon: { vi: 'Mã QR sẽ sớm có.', en: 'QR code coming soon.' },
   qrAlt: { vi: 'Mã QR chuyển tiền', en: 'Payment QR code' },
 }

@@ -8,6 +8,7 @@ const BOOK_URL = 'https://www.instagram.com/veru.works/'
 export default function Header() {
   const { pathname } = useLocation()
   const { lang, setLang, pick } = useLang()
+  const onTos = pathname.startsWith('/tos')
 
   const subNavs = {
     gallery: [
@@ -23,7 +24,7 @@ export default function Header() {
 
   let sub = null
   if (pathname.startsWith('/gallery')) sub = subNavs.gallery
-  else if (pathname.startsWith('/tos')) sub = subNavs.tos
+  else if (onTos) sub = subNavs.tos
 
   return (
     <header className="site-header">
@@ -32,10 +33,13 @@ export default function Header() {
       <nav className="main-nav" aria-label="Main">
         <NavLink to="/gallery">{pick(ui.gallery)}</NavLink>
         <NavLink to="/pricelist">{pick(ui.pricelist)}</NavLink>
-        <NavLink to="/tos" className="nav-tos">
-          <small>{pick(ui.mustRead)}</small>
-          {pick(ui.tos)}
-        </NavLink>
+        <div className="nav-tos-wrap">
+          {/* shown on every page except the TOS pages, where you are already reading it */}
+          <small className={onTos ? 'must-read is-hidden' : 'must-read'} aria-hidden={onTos}>
+            {pick(ui.mustRead)}
+          </small>
+          <NavLink to="/tos">{pick(ui.tos)}</NavLink>
+        </div>
       </nav>
 
       <div className="header-right">

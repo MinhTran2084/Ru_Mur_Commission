@@ -48,7 +48,9 @@ img { max-width: 100%; }
 .main-nav a { position: relative; padding: 0.45rem 1.1rem; border-radius: 999px; color: var(--ink); font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.02em; text-decoration: none; transition: background 0.2s; }
 .main-nav a:hover { background: rgba(228, 244, 243, 0.7); }
 .main-nav a.active { background: var(--mint); }
-.nav-tos small { position: absolute; top: -0.65rem; left: 50%; transform: translateX(-50%); color: var(--crimson); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+.nav-tos-wrap { position: relative; display: flex; }
+.must-read { position: absolute; top: -0.7rem; left: 50%; z-index: 3; transform: translateX(-50%); color: var(--crimson); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; pointer-events: none; transition: opacity 0.25s ease; }
+.must-read.is-hidden { opacity: 0; }
 
 .sub-nav { grid-area: sub; justify-self: center; display: flex; gap: clamp(1rem, 3vw, 3rem); margin-top: 0.35rem; }
 .sub-nav a { padding: 0.3rem 0.25rem 0.45rem; border-bottom: 4px solid transparent; border-radius: 2px; color: var(--ink); text-decoration: none; }
@@ -154,9 +156,19 @@ img { max-width: 100%; }
 .cf-arrow:not(:disabled):hover { transform: translateY(-50%) scale(1.15); }
 
 .cf-caption { width: var(--cw); margin: 1.25rem auto 0; }
-.cf-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; font-size: clamp(1.1rem, 2.2vw, 1.9rem); }
+/* name, year and "for" in three equal columns; the tags below use the same columns */
+.cf-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.25rem 0.75rem; font-size: clamp(1.1rem, 2.2vw, 1.9rem); line-height: 1.25; }
 .cf-meta strong { font-weight: 500; }
-.cf-caption .tags { margin-top: 0.6rem; }
+.cf-name { justify-self: start; text-align: left; }
+.cf-year { justify-self: center; text-align: center; }
+.cf-for { justify-self: end; text-align: right; }
+
+.cf-caption .tags { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem 0.75rem; margin-top: 0.6rem; }
+.cf-caption .tags li { max-width: 100%; overflow-wrap: anywhere; text-align: center; }
+.cf-caption .tags li:nth-child(3n + 1) { justify-self: start; }
+.cf-caption .tags li:nth-child(3n + 2) { justify-self: center; }
+.cf-caption .tags li:nth-child(3n) { justify-self: end; }
+
 
 /* ---------- personal project detail ---------- */
 .detail { display: grid; grid-template-columns: minmax(280px, 1fr) 2.1fr; gap: 1.5rem; align-items: start; }
@@ -293,4 +305,10 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .site-footer a:hover { transform: none; }
   .stage:hover:not(.is-active) { background: none; }
   .cf-arrow:not(:disabled):hover, .stage-arrow:not(:disabled):hover { transform: translateY(-50%); }
+}
+
+.cf-slide.no-anim { transition: none; }
+
+@media (max-width: 700px) {
+  .cf-caption .tags li { padding: 0.1rem 0.6rem; font-size: 0.9rem; }
 }

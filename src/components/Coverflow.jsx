@@ -6,7 +6,7 @@ import { ui } from '../data/ui'
 
 const RANGE = 5 // neighbours shown on each side
 
-export default function Coverflow({ items, detailBase }) {
+export default function Coverflow({ items, detailBase, loop = false }) {
   const { pick } = useLang()
   const [params, setParams] = useSearchParams()
   const touchX = useRef(null)
@@ -16,12 +16,18 @@ export default function Coverflow({ items, detailBase }) {
   const parsed = parseInt(params.get('i') ?? '0', 10)
   const current = Math.min(Math.max(Number.isNaN(parsed) ? 0 : parsed, 0), count - 1)
 
+  // remember where we came from, so items that wrap around can jump without sliding across
+  const prevCurrent = useRef(current)
+  useEffect(() => {
+    prevCurrent.current = current
+  })
+
   const go = useCallback(
     (i) => {
-      const next = Math.min(Math.max(i, 0), count - 1)
+      const next = loop ? ((i % count) + count) % count : Math.min(Math.max(i, 0), count - 1)
       setParams(next === 0 ? {} : { i: String(next) }, { replace: true })
     },
-    [count, setParams]
+    [count, loop, setParams]
   )
 
   useEffect(() => {
@@ -33,8 +39,18 @@ export default function Coverflow({ items, detailBase }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [current, go])
 
+  // signed distance of item i from the selected one (shortest way round when looping)
+  const offsetFrom = (i, from) => {
+    let off = i - from
+    if (loop) {
+      off = ((off % count) + count) % count
+      if (off > count / 2) off -= count
+    }
+    return off
+  }
+
   const visible = items
-    .map((item, i) => ({ item, i, off: i - current }))
+    .map((item, i) => ({ item, off: offsetFrom(i, current), before: offsetFrom(i, prevCurrent.current) }))
     .filter(({ off }) => Math.abs(off) <= RANGE + 1)
 
   const active = items[current]
@@ -59,16 +75,13 @@ export default function Coverflow({ items, detailBase }) {
       )}
 
       <div className="coverflow" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-        {visible.map(({ item, i, off }) => {
+        {visible.map(({ item, off, before }) => {
           const d = Math.abs(off)
           const name = pick(item.title)
+          const jumped = Math.abs(off - before) > 2 // wrapped from one end to the other
+          const cls = ['cf-slide', d === 0 && 'is-center', jumped && 'no-anim'].filter(Boolean).join(' ')
           return (
-            <div
-              key={item.slug}
-              className={d === 0 ? 'cf-slide is-center' : 'cf-slide'}
-              data-d={d}
-              style={{ '--k': d, '--sgn': Math.sign(off) }}
-            >
+            <div key={item.slug} className={cls} data-d={d} style={{ '--k': d, '--sgn': Math.sign(off) }}>
               {item.cover && <img src={item.cover} alt={name} loading="lazy" draggable="false" />}
               {d === 0 ? (
                 detailBase && (
@@ -78,7 +91,7 @@ export default function Coverflow({ items, detailBase }) {
                 <button
                   type="button"
                   className="cf-hit"
-                  onClick={() => go(i)}
+                  onClick={() => go(current + off)}
                   aria-label={name}
                   tabIndex={d > RANGE ? -1 : 0}
                 />
@@ -87,19 +100,23 @@ export default function Coverflow({ items, detailBase }) {
           )
         })}
 
-        <button type="button" className="cf-arrow cf-prev" onClick={() => go(current - 1)} disabled={current === 0} aria-label="Previous">
-          <FaChevronLeft />
-        </button>
-        <button type="button" className="cf-arrow cf-next" onClick={() => go(current + 1)} disabled={current === count - 1} aria-label="Next">
-          <FaChevronRight />
-        </button>
+        {count > 1 && (
+          <>
+            <button type="button" className="cf-arrow cf-prev" onClick={() => go(current - 1)} disabled={!loop && current === 0} aria-label="Previous">
+              <FaChevronLeft />
+            </button>
+            <button type="button" className="cf-arrow cf-next" onClick={() => go(current + 1)} disabled={!loop && current === count - 1} aria-label="Next">
+              <FaChevronRight />
+            </button>
+          </>
+        )}
       </div>
 
       <div className="cf-caption">
         <div className="cf-meta">
-          <strong>{pick(active.title)}</strong>
-          {active.year && <span>{active.year}</span>}
-          {active.for && <span>{pick(active.for)}</span>}
+          <strong className="cf-name">{pick(active.title)}</strong>
+          <span className="cf-year">{active.year}</span>
+          <span className="cf-for">{pick(active.for)}</span>
         </div>
         {active.tags.length > 0 && (
           <ul className="tags">
