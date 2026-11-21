@@ -55,6 +55,10 @@ export default function Coverflow({ items, detailBase, loop = false }) {
 
   const active = items[current]
 
+  // tags in rows of up to three
+  const tagRows = []
+  for (let i = 0; i < active.tags.length; i += 3) tagRows.push(active.tags.slice(i, i + 3))
+
   const onTouchStart = (e) => {
     touchX.current = e.touches[0].clientX
   }
@@ -82,7 +86,9 @@ export default function Coverflow({ items, detailBase, loop = false }) {
           const cls = ['cf-slide', d === 0 && 'is-center', jumped && 'no-anim'].filter(Boolean).join(' ')
           return (
             <div key={item.slug} className={cls} data-d={d} style={{ '--k': d, '--sgn': Math.sign(off) }}>
-              {item.cover && <img src={item.cover} alt={name} loading="lazy" draggable="false" />}
+              {item.cover && (
+                <img className="cf-img" src={item.cover} alt={name} decoding="async" draggable="false" />
+              )}
               {d === 0 ? (
                 detailBase && (
                   <Link className="cf-hit" to={`${detailBase}/${item.slug}`} aria-label={name} />
@@ -112,19 +118,19 @@ export default function Coverflow({ items, detailBase, loop = false }) {
         )}
       </div>
 
-      <div className="cf-caption">
+      <div className="cf-caption" key={active.slug}>
         <div className="cf-meta">
           <strong className="cf-name">{pick(active.title)}</strong>
           <span className="cf-year">{active.year}</span>
           <span className="cf-for">{pick(active.for)}</span>
         </div>
-        {active.tags.length > 0 && (
-          <ul className="tags">
-            {active.tags.map((t, i) => (
+        {tagRows.map((row, r) => (
+          <ul key={r} className={`tags tag-row n${row.length}`}>
+            {row.map((t, i) => (
               <li key={i}>{pick(t)}</li>
             ))}
           </ul>
-        )}
+        ))}
       </div>
     </div>
   )
