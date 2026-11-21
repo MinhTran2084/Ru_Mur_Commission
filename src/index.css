@@ -111,10 +111,20 @@ img { max-width: 100%; }
 .terms-bonus { max-width: 640px; margin: 1.75rem auto 0; padding: 0.8rem 1.5rem; border: 2px solid var(--crimson); border-radius: 999px; text-align: center; color: var(--crimson); }
 
 /* ---------- workflow timeline ---------- */
-.timeline { position: relative; list-style: none; margin: 1rem auto; padding: 0 0 0 2.2rem; max-width: 760px; }
-.timeline::before { content: ''; position: absolute; left: 6px; top: 1.4rem; bottom: 1.4rem; width: 4px; border-radius: 2px; background: var(--teal); }
-.timeline li { position: relative; display: flex; align-items: center; gap: 1.1rem; padding: 0.85rem 0; }
-.timeline li::before { content: ''; position: absolute; left: -2.5rem; top: 50%; width: 1.6rem; height: 1.6rem; transform: translateY(-50%); border-radius: 50%; background: var(--teal); }
+.timeline { list-style: none; margin: 1rem auto; padding: 0; max-width: 760px; }
+.timeline li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.85rem 0 0.85rem 2.6rem;
+  /* each step draws its own piece of the line, so it starts at the first dot and ends at the last one */
+  background: linear-gradient(var(--teal), var(--teal)) 6px 0 / 4px 100% no-repeat;
+}
+.timeline li:first-child { background-position: 6px 100%; background-size: 4px 50%; }
+.timeline li:last-child { background-position: 6px 0; background-size: 4px 50%; }
+.timeline li:only-child { background: none; }
+.timeline li::before { content: ''; position: absolute; left: -4.8px; top: 50%; width: 1.6rem; height: 1.6rem; transform: translateY(-50%); border-radius: 50%; background: var(--teal); }
 .tl-num { min-width: 2rem; text-align: center; font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 2.6rem; line-height: 1; color: var(--crimson); }
 .tl-text { font-size: clamp(1rem, 2vw, 1.3rem); }
 
@@ -205,12 +215,20 @@ img { max-width: 100%; }
 .cf-caption .tag-row.n3 li:nth-child(3) { justify-self: end; }
 
 /* ---------- personal project detail ---------- */
-.detail { display: grid; grid-template-columns: minmax(280px, 1fr) 2.1fr; gap: 1.5rem; align-items: start; }
-.detail-side { padding: 1.5rem; }
+.detail-page { padding-inline: clamp(1rem, 6.5vw, 6rem); }
+.back-pill { display: inline-flex; align-items: center; gap: 0.5rem; margin: 0 0 1rem; padding: 0.45rem 1.2rem 0.45rem 1rem; border: 2px solid var(--crimson); border-radius: 999px; background: #fff; color: var(--crimson); font: inherit; font-size: 1rem; cursor: pointer; transition: background 0.2s, color 0.2s; }
+.back-pill:hover { background: var(--crimson); color: #fff; }
+
+.detail { display: grid; grid-template-columns: minmax(280px, 1fr) 2.1fr; gap: 1.5rem; align-items: stretch; }
+
+/* left box: as tall as the right box; the stage list scrolls inside it */
+.detail-side { position: relative; min-height: 340px; }
+.detail-side-inner { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 1.5rem; }
+.detail-side-inner > :not(.stage-list) { flex: none; }
 .detail-side h1 { margin: 0 0 0.75rem; line-height: 1.1; }
 .pj-name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(1.8rem, 3.4vw, 3rem); color: var(--crimson); }
 .pj-sub { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(1.1rem, 2vw, 1.8rem); color: var(--crimson); }
-.stage-list { list-style: none; display: grid; gap: 0.6rem; margin: 1.25rem 0 0; padding: 0; }
+.stage-list { position: relative; flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: 0.6rem; margin: 1.25rem 0 0; padding: 0 0.25rem 0 0; list-style: none; scrollbar-width: thin; scrollbar-color: var(--teal) transparent; }
 .stage { display: grid; grid-template-columns: minmax(110px, 40%) 1fr; gap: 1rem; width: 100%; padding: 0.4rem; border: 2px solid transparent; border-radius: 16px; background: none; font: inherit; text-align: left; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
 .stage:hover { background: rgba(255, 255, 255, 0.5); }
 .stage.is-active { border-color: var(--crimson); background: rgba(255, 255, 255, 0.6); }
@@ -226,6 +244,12 @@ img { max-width: 100%; }
 .stage-next { right: 0.75rem; }
 .detail-main h2 { margin: 1rem 0 0.5rem; text-align: center; font-size: clamp(1.4rem, 3vw, 2.5rem); font-weight: 500; }
 .detail-main p { max-width: 60ch; margin: 0 auto; text-align: center; color: var(--muted); font-size: clamp(1rem, 1.5vw, 1.3rem); }
+
+/* previous / next project: big buttons at the far left and right of the screen */
+.pj-arrow { position: fixed; top: 50%; z-index: 30; display: grid; place-items: center; width: 3.6rem; height: 3.6rem; padding: 0; transform: translateY(-50%); border: 0; border-radius: 50%; background: var(--crimson); color: #fff; font-size: 1.5rem; box-shadow: 0 6px 18px rgba(194, 30, 98, 0.35); cursor: pointer; transition: transform 0.2s, background 0.2s; }
+.pj-prev { left: clamp(0.4rem, 1vw, 1.5rem); }
+.pj-next { right: clamp(0.4rem, 1vw, 1.5rem); }
+.pj-arrow:hover { background: #a8164f; transform: translateY(-50%) scale(1.08); }
 
 /* capitalise the first letter of free text (tags, notes, descriptions) */
 .tags li::first-letter,
@@ -330,4 +354,41 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .site-footer a:hover { transform: none; }
   .stage:hover:not(.is-active) { background: none; }
   .cf-arrow:not(:disabled):hover, .stage-arrow:not(:disabled):hover { transform: translateY(-50%); }
+}
+
+/* ---------- detail page on narrow screens ---------- */
+@media (max-width: 860px) {
+  .detail-page { padding-bottom: 5.5rem; }
+  .detail-side { min-height: 0; }
+  .detail-side-inner { position: static; padding: 1.25rem; }
+  .detail-side .stage-list { flex: none; max-height: 24rem; }
+
+  /* the project arrows move to the bottom corners so they never cover the content */
+  .pj-arrow { top: auto; bottom: 1rem; width: 3rem; height: 3rem; font-size: 1.25rem; transform: none; }
+  .pj-arrow:hover { background: var(--crimson); transform: none; }
+  .pj-prev { left: 1rem; }
+  .pj-next { right: 1rem; }
+}
+
+/* line under the donate page title */
+.page-sub { margin: -0.75rem 0 1.75rem; text-align: center; color: var(--muted); font-size: clamp(1rem, 2vw, 1.25rem); }
+
+/* ---------- phones: caption, tags and sub-tabs (keep at the very bottom) ---------- */
+@media (max-width: 700px) {
+  .cf { --cw: min(570px, 80vw); }
+
+  /* name | year | for: the middle column takes what it needs, the outer ones share the rest */
+  .cf-meta { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.25rem 0.6rem; }
+  .cf-meta strong,
+  .cf-meta span { font-size: clamp(0.95rem, 4.2vw, 1.15rem); }
+
+  /* tags: same positions, but words are never cut in the middle */
+  .cf-caption .tag-row.n3 { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.4rem 0.5rem; }
+  .cf-caption .tag-row li { padding: 0.05rem 0.55rem; font-size: 0.8rem; line-height: 1.5; overflow-wrap: normal; word-break: normal; hyphens: none; }
+}
+
+/* ---------- sub-tabs on one line (stronger selectors, so file order doesn't matter) ---------- */
+@media (max-width: 860px) {
+  .site-header .sub-nav { flex-wrap: nowrap; gap: clamp(0.5rem, 3.4vw, 1.25rem); max-width: 100%; }
+  .site-header .sub-nav a { flex: 0 1 auto; padding: 0.25rem 0.1rem 0.4rem; font-size: clamp(0.66rem, 3.2vw, 0.9rem); white-space: nowrap; }
 }

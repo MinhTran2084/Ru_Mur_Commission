@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { FaInstagram, FaThreads, FaRegEnvelope, FaMugHot } from 'react-icons/fa6'
+import { FaInstagram, FaThreads, FaRegEnvelope } from 'react-icons/fa6'
+import CoffeeIcon from './CoffeeIcon'
 
 export default function Footer() {
   return (
@@ -23,7 +24,7 @@ export default function Footer() {
         </li>
         <li>
           <Link to="/donate" aria-label="Buy us a coffee">
-            <FaMugHot />
+            <CoffeeIcon />
           </Link>
         </li>
       </ul>

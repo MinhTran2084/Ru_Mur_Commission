@@ -1,20 +1,20 @@
-import { useCallback, useEffect, useRef } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FaChevronLeft, FaChevronRight, FaMagnifyingGlass } from 'react-icons/fa6'
 import { useLang } from '../lang.jsx'
 import { ui } from '../data/ui'
+import { readIndex, writeIndex } from '../data/cfIndex'
 
 const RANGE = 5 // neighbours shown on each side
 
-export default function Coverflow({ items, detailBase, loop = false }) {
+export default function Coverflow({ items, detailBase, loop = false, storageKey }) {
   const { pick } = useLang()
-  const [params, setParams] = useSearchParams()
   const touchX = useRef(null)
   const count = items.length
 
-  // the selected item lives in the URL (?i=3), so the back button returns to it
-  const parsed = parseInt(params.get('i') ?? '0', 10)
-  const current = Math.min(Math.max(Number.isNaN(parsed) ? 0 : parsed, 0), count - 1)
+  // the selected item is remembered for this tab, so Back returns to it
+  const [selected, setSelected] = useState(() => readIndex(storageKey))
+  const current = Math.min(Math.max(selected, 0), count - 1)
 
   // remember where we came from, so items that wrap around can jump without sliding across
   const prevCurrent = useRef(current)
@@ -25,9 +25,10 @@ export default function Coverflow({ items, detailBase, loop = false }) {
   const go = useCallback(
     (i) => {
       const next = loop ? ((i % count) + count) % count : Math.min(Math.max(i, 0), count - 1)
-      setParams(next === 0 ? {} : { i: String(next) }, { replace: true })
+      setSelected(next)
+      writeIndex(storageKey, next)
     },
-    [count, loop, setParams]
+    [count, loop, storageKey]
   )
 
   useEffect(() => {

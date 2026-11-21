@@ -1,22 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { FaArrowLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import { personal } from '../data/gallery'
+import { writeIndex } from '../data/cfIndex'
 import { useLang } from '../lang.jsx'
 import { ui } from '../data/ui'
 
 export default function PersonalDetail() {
   const { pick } = useLang()
+  const navigate = useNavigate()
+  const location = useLocation()
   const { slug } = useParams()
-  const project = personal.find((p) => p.slug === slug)
+
+  const projIndex = personal.findIndex((p) => p.slug === slug)
+  const project = personal[projIndex]
   const stages = project?.stages ?? []
   const count = stages.length
+
   const [sel, setSel] = useState(0)
   const touchX = useRef(null)
+  const listRef = useRef(null)
+  const index = Math.min(sel, Math.max(count - 1, 0))
 
   useEffect(() => {
     setSel(0)
   }, [slug])
+
+  // remember this project, so the carousel opens on it when you go back
+  useEffect(() => {
+    if (projIndex >= 0) writeIndex('personal', projIndex)
+  }, [projIndex])
 
   useEffect(() => {
     const onKey = (e) => {
@@ -27,18 +40,50 @@ export default function PersonalDetail() {
     return () => window.removeEventListener('keydown', onKey)
   }, [count])
 
+  // keep the selected stage visible inside the scrolling list
+  useEffect(() => {
+    const list = listRef.current
+    const el = list?.children[index]
+    if (!list || !el) return
+    const top = el.offsetTop
+    const bottom = top + el.offsetHeight
+    if (top < list.scrollTop) list.scrollTo({ top: top - 4, behavior: 'smooth' })
+    else if (bottom > list.scrollTop + list.clientHeight) {
+      list.scrollTo({ top: bottom - list.clientHeight + 4, behavior: 'smooth' })
+    }
+  }, [index, slug])
+
   if (!project) return <Navigate to="/gallery/personal" replace />
+
+  // history back when there is a previous page of this site, otherwise the carousel
+  const goBack = () => {
+    if (location.key !== 'default') navigate(-1)
+    else navigate('/gallery/personal', { replace: true })
+  }
+
+  // other projects replace this page in the history, so the phone's back button still leaves in one step
+  const goProject = (d) => {
+    const n = personal.length
+    navigate(`/gallery/personal/${personal[(projIndex + d + n) % n].slug}`, { replace: true })
+  }
+
+  const backButton = (
+    <button type="button" className="back-pill" onClick={goBack}>
+      <FaArrowLeft aria-hidden="true" />
+      {pick(ui.back)}
+    </button>
+  )
 
   if (count === 0) {
     return (
       <div className="page page-narrow">
+        {backButton}
         <h1 className="page-title">{pick(project.title)}</h1>
         <p className="muted center">{pick(ui.noStages)}</p>
       </div>
     )
   }
 
-  const index = Math.min(sel, count - 1)
   const stage = stages[index]
   const go = (d) => setSel(Math.min(Math.max(index + d, 0), count - 1))
 
@@ -53,54 +98,74 @@ export default function PersonalDetail() {
   }
 
   return (
-    <div className="page page-wide detail">
-      <aside className="card detail-side">
-        <h1>
-          <span className="pj-name">{pick(project.title)}</span>{' '}
-          <span className="pj-sub">{pick(ui.projectWorkflow)}</span>
-        </h1>
-        {project.tags.length > 0 && (
-          <ul className="tags tags-dark">
-            {project.tags.map((t, i) => (
-              <li key={i}>{pick(t)}</li>
-            ))}
-          </ul>
-        )}
+    <>
+      <div className="page page-wide detail-page">
+        {backButton}
 
-        <ul className="stage-list">
-          {stages.map((s, i) => (
-            <li key={i}>
-              <button
-                type="button"
-                className={i === index ? 'stage is-active' : 'stage'}
-                onClick={() => setSel(i)}
-              >
-                <span className="stage-thumb">
-                  {s.image && <img src={s.image} alt="" loading="lazy" />}
-                </span>
-                <span className="stage-text">
-                  <strong>{pick(s.title)}</strong>
-                  {s.notes && <small>{pick(s.notes)}</small>}
-                </span>
+        <div className="detail">
+          <aside className="card detail-side">
+            <div className="detail-side-inner">
+              <h1>
+                <span className="pj-name">{pick(project.title)}</span>{' '}
+                <span className="pj-sub">{pick(ui.projectWorkflow)}</span>
+              </h1>
+              {project.tags.length > 0 && (
+                <ul className="tags tags-dark">
+                  {project.tags.map((t, i) => (
+                    <li key={i}>{pick(t)}</li>
+                  ))}
+                </ul>
+              )}
+
+              <ul className="stage-list" ref={listRef}>
+                {stages.map((s, i) => (
+                  <li key={i}>
+                    <button
+                      type="button"
+                      className={i === index ? 'stage is-active' : 'stage'}
+                      onClick={() => setSel(i)}
+                    >
+                      <span className="stage-thumb">
+                        {s.image && <img src={s.image} alt="" loading="lazy" />}
+                      </span>
+                      <span className="stage-text">
+                        <strong>{pick(s.title)}</strong>
+                        {s.notes && <small>{pick(s.notes)}</small>}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+
+          <section className="card detail-main">
+            <div className="stage-view" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+              {stage.image && <img key={`${slug}-${index}`} src={stage.image} alt={pick(stage.title)} />}
+              <button type="button" className="stage-arrow stage-prev" onClick={() => go(-1)} disabled={index === 0} aria-label="Previous">
+                <FaChevronLeft />
               </button>
-            </li>
-          ))}
-        </ul>
-      </aside>
+              <button type="button" className="stage-arrow stage-next" onClick={() => go(1)} disabled={index === count - 1} aria-label="Next">
+                <FaChevronRight />
+              </button>
+            </div>
+            <h2>{pick(stage.title)}</h2>
+            {stage.description && <p>{pick(stage.description)}</p>}
+          </section>
+        </div>
+      </div>
 
-      <section className="card detail-main">
-        <div className="stage-view" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-          {stage.image && <img key={index} src={stage.image} alt={pick(stage.title)} />}
-          <button type="button" className="stage-arrow stage-prev" onClick={() => go(-1)} disabled={index === 0} aria-label="Previous">
+      {/* outside the animated page, so "fixed" really means the screen edges */}
+      {personal.length > 1 && (
+        <>
+          <button type="button" className="pj-arrow pj-prev" onClick={() => goProject(-1)} aria-label={pick(ui.prevProject)}>
             <FaChevronLeft />
           </button>
-          <button type="button" className="stage-arrow stage-next" onClick={() => go(1)} disabled={index === count - 1} aria-label="Next">
+          <button type="button" className="pj-arrow pj-next" onClick={() => goProject(1)} aria-label={pick(ui.nextProject)}>
             <FaChevronRight />
           </button>
-        </div>
-        <h2>{pick(stage.title)}</h2>
-        {stage.description && <p>{pick(stage.description)}</p>}
-      </section>
-    </div>
+        </>
+      )}
+    </>
   )
 }

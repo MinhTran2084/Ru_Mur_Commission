@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -9,11 +9,20 @@ import GalleryPage from './pages/GalleryPage'
 import PersonalDetail from './pages/PersonalDetail'
 import Donate from './pages/Donate'
 
+const isProjectPage = (path) => path.startsWith('/gallery/personal/')
+
 function ScrollToTop() {
   const { pathname } = useLocation()
+  const previous = useRef(pathname)
+
   useEffect(() => {
+    const was = previous.current
+    previous.current = pathname
+    // going from one personal project to another keeps the current scroll position
+    if (isProjectPage(was) && isProjectPage(pathname)) return
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [pathname])
+
   return null
 }
 
