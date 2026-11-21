@@ -1,7 +1,6 @@
 export const pricing = [
   {
     title: 'Digital',
-    note: 'Lưu ý: Giá LED động có thể tăng tùy vào motion.',
     rows: [
       ['Story ads', '100–250'],
       ['Social post', '100–150'],
@@ -9,7 +8,7 @@ export const pricing = [
       ['Avatar/Cover', '70–200'],
       ['Preview', '50–100'],
       ['LED tĩnh', '300–700'],
-      ['LED động', '700–1500'],
+      ['LED động', '500/frame'],
       ['Preview LED', '100–200'],
       ['Preview truck', '150–200'],
     ],

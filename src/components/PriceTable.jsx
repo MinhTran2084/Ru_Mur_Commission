@@ -1,3 +1,6 @@
+import { useLang } from '../lang.jsx'
+import { ui, priceTitles, priceItems } from '../data/ui'
+
 // Lets long names like "Keyring/Badge/Standee/Sticker..." wrap after each slash
 const withBreaks = (text) =>
   text.split('/').flatMap((part, i, parts) =>
@@ -5,28 +8,30 @@ const withBreaks = (text) =>
   )
 
 export default function PriceTable({ title, rows }) {
+  const { pick } = useLang()
+
   return (
-    <div className="price-card">
-      <table>
-        <thead>
-          <tr>
-            <th>{title}</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map(([item, price]) => (
-            <tr key={item}>
-              <th scope="row">{withBreaks(item)}</th>
-              <td>
-                <span className={/^\d/.test(price) ? 'price' : 'price price-soft'}>
-                  {price}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <section className="price-col">
+      <h2>
+        <span>{pick(priceTitles[title]) ?? title}</span>
+        <span className="price-head">
+          <small className="price-unit">{pick(ui.priceUnit)}</small>
+          {pick(ui.price)}
+        </span>
+      </h2>
+      <ul>
+        {rows.map(([item, price]) => {
+          const soon = /soon/i.test(price)
+          return (
+            <li key={item}>
+              <span className="price-item">{withBreaks(pick(priceItems[item]) ?? item)}</span>
+              <span className={soon ? 'pill pill-soon' : 'pill'}>
+                {soon ? pick(ui.comingSoon) : price}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
   )
 }
