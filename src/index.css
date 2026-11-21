@@ -137,8 +137,35 @@ img { max-width: 100%; }
 
 /* ---------- gallery carousel ---------- */
 .cf { --cw: min(570px, 72vw); --nw: clamp(14px, 5vw, 100px); --gap: 8px; }
-.cf-hint { margin: 0 0 1rem; text-align: center; color: var(--teal-dark); font-size: 1.05rem; }
-.cf-hint svg { margin-right: 0.35rem; vertical-align: -2px; }
+/* "tap for more details": a breathing pill at the top middle of the big card */
+.cf-hint {
+  position: absolute;
+  top: 1.4rem;
+  left: 50%;
+  z-index: 15;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  color: var(--teal-dark);
+  font-size: 1rem;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: breathe 3.4s ease-in-out infinite;
+}
+.cf-hint svg { flex: none; }
+@keyframes breathe {
+  0%, 100% { opacity: 0.45; transform: translateX(-50%) scale(0.97); }
+  50%      { opacity: 1;    transform: translateX(-50%) scale(1.03); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cf-hint { animation: none; opacity: 0.95; }
+}
 
 .coverflow { position: relative; height: calc(var(--cw) + 1rem); overflow: hidden; touch-action: pan-y; }
 .cf-slide {

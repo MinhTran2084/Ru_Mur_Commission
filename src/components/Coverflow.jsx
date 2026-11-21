@@ -72,13 +72,6 @@ export default function Coverflow({ items, detailBase, loop = false, storageKey 
 
   return (
     <div className="page page-wide cf">
-      {detailBase && (
-        <p className="cf-hint">
-          <FaMagnifyingGlass aria-hidden="true" />
-          {pick(ui.tapToExplore)}
-        </p>
-      )}
-
       <div className="coverflow" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         {visible.map(({ item, off, before }) => {
           const d = Math.abs(off)
@@ -106,6 +99,14 @@ export default function Coverflow({ items, detailBase, loop = false, storageKey 
             </div>
           )
         })}
+
+        {/* floats over the top middle of the big card */}
+        {detailBase && (
+          <p className="cf-hint">
+            <FaMagnifyingGlass aria-hidden="true" />
+            {pick(ui.tapToExplore)}
+          </p>
+        )}
 
         {count > 1 && (
           <>
