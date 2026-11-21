@@ -1,7 +1,10 @@
-// Outline coffee cup with wavy steam, drawn to match the other footer icons.
+// Outline coffee cup with wavy steam. The cup's bottom lines up with the other footer icons,
+// and the steam is allowed to rise above the top of the icon.
+// Position: see the .coffee-icon rule in index.css.
 export default function CoffeeIcon(props) {
   return (
     <svg
+      className="coffee-icon"
       viewBox="0 0 24 24"
       width="1em"
       height="1em"
@@ -10,17 +13,18 @@ export default function CoffeeIcon(props) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      overflow="visible"
       aria-hidden="true"
       {...props}
     >
       {/* wavy steam */}
-      <path d="M6 8c-1.5-1.2 1.5-2.3 0-3.5s1.5-2.3 0-3.5" />
-      <path d="M9.5 8c1.5-1.2-1.5-2.3 0-3.5s-1.5-2.3 0-3.5" />
-      <path d="M13 8c-1.5-1.2 1.5-2.3 0-3.5s1.5-2.3 0-3.5" />
+      <path d="M5.5 4.5c-1.5-1.2 1.5-2.3 0-3.5s1.5-2.3 0-3.5" />
+      <path d="M9.5 4.5c1.5-1.2-1.5-2.3 0-3.5s-1.5-2.3 0-3.5" />
+      <path d="M13.5 4.5c-1.5-1.2 1.5-2.3 0-3.5s1.5-2.3 0-3.5" />
       {/* cup */}
-      <path d="M3 11h13v5a4.5 4.5 0 0 1-4.5 4.5h-4A4.5 4.5 0 0 1 3 16v-5z" />
+      <path d="M2 7.5h15V17a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7.5z" />
       {/* handle */}
-      <path d="M16 12.5h1.2a2.75 2.75 0 0 1 0 5.5H16" />
+      <path d="M17 10.5h1.5a3.75 3.75 0 0 1 0 7.5H17" />
     </svg>
   )
 }

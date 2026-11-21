@@ -400,3 +400,5 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .tl-num { min-width: 1.6rem; font-size: 1.7rem; }
   .tl-text { font-size: 0.95rem; }
 }
+
+.coffee-icon { transform: translateY(-0.02em); }
