@@ -117,7 +117,8 @@ img { max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 1.1rem;
-  padding: 0.85rem 0 0.85rem 2.6rem;
+  min-height: 5.5rem; /* same height for every step, so the dots are evenly spaced */
+  padding: 0.5rem 0 0.5rem 2.6rem;
   /* each step draws its own piece of the line, so it starts at the first dot and ends at the last one */
   background: linear-gradient(var(--teal), var(--teal)) 6px 0 / 4px 100% no-repeat;
 }
@@ -125,8 +126,8 @@ img { max-width: 100%; }
 .timeline li:last-child { background-position: 6px 0; background-size: 4px 50%; }
 .timeline li:only-child { background: none; }
 .timeline li::before { content: ''; position: absolute; left: -4.8px; top: 50%; width: 1.6rem; height: 1.6rem; transform: translateY(-50%); border-radius: 50%; background: var(--teal); }
-.tl-num { min-width: 2rem; text-align: center; font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 2.6rem; line-height: 1; color: var(--crimson); }
-.tl-text { font-size: clamp(1rem, 2vw, 1.3rem); }
+.tl-num { min-width: 2rem; text-align: center; font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 2.2rem; line-height: 1; color: var(--crimson); }
+.tl-text { font-size: clamp(0.95rem, 1.5vw, 1.1rem); }
 
 /* ---------- brief ---------- */
 .brief-tips { padding-left: 1.2rem; }
@@ -391,4 +392,11 @@ a, button { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 860px) {
   .site-header .sub-nav { flex-wrap: nowrap; gap: clamp(0.5rem, 3.4vw, 1.25rem); max-width: 100%; }
   .site-header .sub-nav a { flex: 0 1 auto; padding: 0.25rem 0.1rem 0.4rem; font-size: clamp(0.66rem, 3.2vw, 0.9rem); white-space: nowrap; }
+}
+
+/* ---------- workflow timeline on phones ---------- */
+@media (max-width: 860px) {
+  .timeline li { min-height: 5rem; padding-left: 2.4rem; }
+  .tl-num { min-width: 1.6rem; font-size: 1.7rem; }
+  .tl-text { font-size: 0.95rem; }
 }
