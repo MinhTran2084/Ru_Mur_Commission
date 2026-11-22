@@ -1,5 +1,5 @@
 import { useLang } from '../lang.jsx'
-import { ui, priceTitles, priceItems, priceValues } from '../data/ui'
+import { ui } from '../data/ui'
 
 // Keeps anything in parentheses (like "(2 sides)") together on one line
 const keepTogether = (text) => text.replace(/\([^)]*\)/g, (m) => m.replace(/ /g, '\u00a0'))
@@ -10,34 +10,30 @@ const withBreaks = (text) =>
     .split('/')
     .flatMap((part, i, parts) => (i < parts.length - 1 ? [part + '/', <wbr key={i} />] : [part]))
 
-const isSoon = (price) => /soon/i.test(price)
-
-export default function PriceTable({ title, rows }) {
+export default function PriceTable({ section }) {
   const { pick } = useLang()
 
   // "coming soon" rows always go last
-  const ordered = [...rows.filter(([, p]) => !isSoon(p)), ...rows.filter(([, p]) => isSoon(p))]
+  const rows = [...section.rows.filter((r) => !r.soon), ...section.rows.filter((r) => r.soon)]
 
   return (
     <section className="price-col">
       <h2>
-        <span>{pick(priceTitles[title]) ?? title}</span>
+        <span>{pick(section.title)}</span>
         <span className="price-head">
           <small className="price-unit">{pick(ui.priceUnit)}</small>
           {pick(ui.price)}
         </span>
       </h2>
       <ul>
-        {ordered.map(([item, price]) => {
-          const soon = isSoon(price)
-          const shown = soon ? pick(ui.comingSoon) : pick(priceValues[price]) ?? price
-          return (
-            <li key={item}>
-              <span className="price-item">{withBreaks(pick(priceItems[item]) ?? item)}</span>
-              <span className={soon ? 'pill pill-soon' : 'pill'}>{shown}</span>
-            </li>
-          )
-        })}
+        {rows.map((r) => (
+          <li key={r.item.vi}>
+            <span className="price-item">{withBreaks(pick(r.item))}</span>
+            <span className={r.soon ? 'pill pill-soon' : 'pill'}>
+              {r.soon ? pick(ui.comingSoon) : pick(r.price)}
+            </span>
+          </li>
+        ))}
       </ul>
     </section>
   )

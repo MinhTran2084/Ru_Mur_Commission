@@ -2,9 +2,9 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLang } from '../lang.jsx'
 import { ui } from '../data/ui'
+import site from '../content/site.json'
 
-// TODO: confirm where "Book now!" should go (Instagram profile for now)
-const BOOK_URL = 'https://www.instagram.com/veru.works/'
+const BOOK_URL = site.bookUrl
 
 // Measures the link marked "active" inside a nav, so an indicator can slide to it.
 function useActiveBox(navRef, key) {

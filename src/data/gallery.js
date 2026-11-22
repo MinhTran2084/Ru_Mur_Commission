@@ -4,6 +4,7 @@
 // The order of the cards comes from src/gallery/<section>/order.txt:
 // one folder name per line, the first line is the first card.
 // Folders that are not listed there come after the listed ones.
+// A project with "hidden": true in its info.json is not shown.
 
 // How the folders that are NOT in order.txt are ordered:
 //   'name' = by folder name (numbers first, then A-Z)
@@ -45,6 +46,7 @@ function load(section) {
 
   const list = Object.entries(infos)
     .filter(([path]) => path.split('/')[2] === section)
+    .filter(([, info]) => info.hidden !== true)
     .map(([path, info]) => {
       const slug = path.split('/')[3]
       const prefix = `../gallery/${section}/${slug}/`

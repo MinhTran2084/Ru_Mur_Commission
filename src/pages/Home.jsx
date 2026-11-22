@@ -4,6 +4,7 @@ import { useLang } from '../lang.jsx'
 
 export default function Home() {
   const { pick } = useLang()
+  const h = pick(home)
 
   return (
     <div className="page page-wide home">
@@ -11,10 +12,10 @@ export default function Home() {
         {hero[0] && <img src={hero[0].url} alt="Ru&Mur" />}
       </div>
       <div className="home-copy">
-        <h1>{pick(home.title)}</h1>
-        <p>{pick(home.text)}</p>
+        <h1>{h.title}</h1>
+        <p>{h.text}</p>
         <ul className="tags">
-          {home.tags.map((t) => (
+          {h.tags.map((t) => (
             <li key={t}>{t}</li>
           ))}
         </ul>
