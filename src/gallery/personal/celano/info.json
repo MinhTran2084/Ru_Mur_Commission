@@ -1,0 +1,21 @@
+{
+  "title": "Celano",
+  "date": "2026",
+  "for": "Meow meow",
+  "tags": ["Illustration", "3D"],
+  "cover": "celano.png",
+  "stages": [
+    {
+      "image": "celano.png",
+      "title": "Meow meow 1",
+      "notes": "meo mesoujbeofajbnfgoaw",
+      "description": "Longer text shown on the right."
+    },
+    {
+      "image": "celano.png",
+      "title": "Meow meow 2",
+      "notes": "THèm bún đậu thèm bún bò",
+      "description": "Longer text."
+    }
+  ]
+}

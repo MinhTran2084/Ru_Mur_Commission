@@ -4,6 +4,7 @@ import { FaChevronLeft, FaChevronRight, FaMagnifyingGlass } from 'react-icons/fa
 import { useLang } from '../lang.jsx'
 import { ui } from '../data/ui'
 import { readIndex, writeIndex } from '../data/cfIndex'
+import Media from './Media'
 
 const MAX_RANGE = 5 // most neighbours shown on each side
 const mod = (a, n) => ((a % n) + n) % n
@@ -69,17 +70,16 @@ export default function Coverflow({ items, detailBase, loop = false, storageKey 
 
   return (
     <div className="page page-wide cf">
-      <div className="coverflow" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      {/* --Rjs tells the CSS how many strips are visible on each side, so it can clip the window exactly */}
+      <div className="coverflow" style={{ '--Rjs': R }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         {slots.map(({ abs, off, item }) => {
           const d = Math.abs(off)
           const name = pick(item.title)
-          const far = d > R // outside the visible range: kept only so it can slide in or out smoothly
+          const far = d > R // outside the window: kept only so it can slide in or out smoothly
           const cls = ['cf-slide', d === 0 && 'is-center', far && 'is-far'].filter(Boolean).join(' ')
           return (
             <div key={abs} className={cls} data-d={d} style={{ '--k': d, '--sgn': Math.sign(off) }}>
-              {item.cover && (
-                <img className="cf-img" src={item.cover} alt={name} decoding="async" draggable="false" />
-              )}
+              <Media src={item.cover} alt={name} className="cf-img" play={d === 0} />
               {d === 0 ? (
                 detailBase && (
                   <Link className="cf-hit" to={`${detailBase}/${item.slug}`} aria-label={name} />

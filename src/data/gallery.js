@@ -1,10 +1,11 @@
 // Reads src/gallery/sample/<project>/ and src/gallery/personal/<project>/.
-// Each project folder has an info.json plus its images.
+// Each project folder has an info.json plus its images and videos.
 
 const infos = import.meta.glob('../gallery/*/*/info.json', { eager: true, import: 'default' })
-const images = import.meta.glob('../gallery/*/*/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', {
-  eager: true, query: '?url', import: 'default',
-})
+const images = import.meta.glob(
+  '../gallery/*/*/*.{jpg,jpeg,png,webp,gif,mp4,webm,JPG,JPEG,PNG,WEBP,GIF,MP4,WEBM}',
+  { eager: true, query: '?url', import: 'default' }
+)
 
 const byName = ([a], [b]) => a.localeCompare(b, undefined, { numeric: true })
 

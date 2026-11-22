@@ -1,0 +1,21 @@
+{
+  "title": "PJ XYZ",
+  "date": "2026-11-19",
+  "for": "for@xxx",
+  "tags": ["Illustration", "3D"],
+  "cover": "LYHD.png",
+  "stages": [
+    {
+      "image": "01-moodboard.jpg",
+      "title": "Moodboard & sketches",
+      "notes": "Short note under the title",
+      "description": "Longer text shown on the right."
+    },
+    {
+      "image": "02-blockout.jpg",
+      "title": "Block-out",
+      "notes": "Short note",
+      "description": "Longer text."
+    }
+  ]
+}

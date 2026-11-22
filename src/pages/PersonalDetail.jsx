@@ -5,6 +5,7 @@ import { personal } from '../data/gallery'
 import { writeIndex } from '../data/cfIndex'
 import { useLang } from '../lang.jsx'
 import { ui } from '../data/ui'
+import Media from '../components/Media'
 
 export default function PersonalDetail() {
   const { pick } = useLang()
@@ -126,7 +127,7 @@ export default function PersonalDetail() {
                       onClick={() => setSel(i)}
                     >
                       <span className="stage-thumb">
-                        {s.image && <img src={s.image} alt="" loading="lazy" />}
+                        <Media src={s.image} play={false} />
                       </span>
                       <span className="stage-text">
                         <strong>{pick(s.title)}</strong>
@@ -141,7 +142,12 @@ export default function PersonalDetail() {
 
           <section className="card detail-main">
             <div className="stage-view" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-              {stage.image && <img key={`${slug}-${index}`} src={stage.image} alt={pick(stage.title)} />}
+              <Media
+                key={`${slug}-${index}`}
+                src={stage.image}
+                alt={pick(stage.title)}
+                controls={stage.controls === true}
+              />
               <button type="button" className="stage-arrow stage-prev" onClick={() => go(-1)} disabled={index === 0} aria-label="Previous">
                 <FaChevronLeft />
               </button>
