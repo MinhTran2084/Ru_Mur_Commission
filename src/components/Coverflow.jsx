@@ -5,54 +5,51 @@ import { useLang } from '../lang.jsx'
 import { ui } from '../data/ui'
 import { readIndex, writeIndex } from '../data/cfIndex'
 
-const RANGE = 5 // neighbours shown on each side
+const MAX_RANGE = 5 // most neighbours shown on each side
+const mod = (a, n) => ((a % n) + n) % n
 
 export default function Coverflow({ items, detailBase, loop = false, storageKey }) {
   const { pick } = useLang()
   const touchX = useRef(null)
   const count = items.length
 
-  // the selected item is remembered for this tab, so Back returns to it
-  const [selected, setSelected] = useState(() => readIndex(storageKey))
-  const current = Math.min(Math.max(selected, 0), count - 1)
+  // neighbours shown on each side (a looping list never shows the same item twice while at rest)
+  const R = loop
+    ? Math.min(MAX_RANGE, Math.max(count > 1 ? 1 : 0, Math.floor((count - 1) / 2)))
+    : MAX_RANGE
 
-  // remember where we came from, so items that wrap around can jump without sliding across
-  const prevCurrent = useRef(current)
-  useEffect(() => {
-    prevCurrent.current = current
-  })
+  // "position" counts every step ever taken, so a looping carousel keeps moving in one direction
+  // and no strip ever jumps from one end to the other: it slides out on one side
+  // while another copy slides in on the other side.
+  const [position, setPosition] = useState(() =>
+    Math.min(Math.max(readIndex(storageKey), 0), count - 1)
+  )
+  const current = loop ? mod(position, count) : Math.min(Math.max(position, 0), count - 1)
 
   const go = useCallback(
-    (i) => {
-      const next = loop ? ((i % count) + count) % count : Math.min(Math.max(i, 0), count - 1)
-      setSelected(next)
-      writeIndex(storageKey, next)
+    (to) => {
+      const next = loop ? to : Math.min(Math.max(to, 0), count - 1)
+      setPosition(next)
+      writeIndex(storageKey, loop ? mod(next, count) : next)
     },
     [count, loop, storageKey]
   )
 
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'ArrowLeft') go(current - 1)
-      if (e.key === 'ArrowRight') go(current + 1)
+      if (e.key === 'ArrowLeft') go(position - 1)
+      if (e.key === 'ArrowRight') go(position + 1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [current, go])
+  }, [position, go])
 
-  // signed distance of item i from the selected one (shortest way round when looping)
-  const offsetFrom = (i, from) => {
-    let off = i - from
-    if (loop) {
-      off = ((off % count) + count) % count
-      if (off > count / 2) off -= count
-    }
-    return off
+  // the strips to draw: every slot from -(R+1) to +(R+1), each with its own key
+  const slots = []
+  for (let abs = position - R - 1; abs <= position + R + 1; abs++) {
+    if (!loop && (abs < 0 || abs > count - 1)) continue
+    slots.push({ abs, off: abs - position, item: items[mod(abs, count)] })
   }
-
-  const visible = items
-    .map((item, i) => ({ item, off: offsetFrom(i, current), before: offsetFrom(i, prevCurrent.current) }))
-    .filter(({ off }) => Math.abs(off) <= RANGE + 1)
 
   const active = items[current]
 
@@ -67,19 +64,19 @@ export default function Coverflow({ items, detailBase, loop = false, storageKey 
     if (touchX.current === null) return
     const dx = e.changedTouches[0].clientX - touchX.current
     touchX.current = null
-    if (Math.abs(dx) > 50) go(current + (dx < 0 ? 1 : -1))
+    if (Math.abs(dx) > 50) go(position + (dx < 0 ? 1 : -1))
   }
 
   return (
     <div className="page page-wide cf">
       <div className="coverflow" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-        {visible.map(({ item, off, before }) => {
+        {slots.map(({ abs, off, item }) => {
           const d = Math.abs(off)
           const name = pick(item.title)
-          const jumped = Math.abs(off - before) > 2 // wrapped from one end to the other
-          const cls = ['cf-slide', d === 0 && 'is-center', jumped && 'no-anim'].filter(Boolean).join(' ')
+          const far = d > R // outside the visible range: kept only so it can slide in or out smoothly
+          const cls = ['cf-slide', d === 0 && 'is-center', far && 'is-far'].filter(Boolean).join(' ')
           return (
-            <div key={item.slug} className={cls} data-d={d} style={{ '--k': d, '--sgn': Math.sign(off) }}>
+            <div key={abs} className={cls} data-d={d} style={{ '--k': d, '--sgn': Math.sign(off) }}>
               {item.cover && (
                 <img className="cf-img" src={item.cover} alt={name} decoding="async" draggable="false" />
               )}
@@ -91,9 +88,9 @@ export default function Coverflow({ items, detailBase, loop = false, storageKey 
                 <button
                   type="button"
                   className="cf-hit"
-                  onClick={() => go(current + off)}
+                  onClick={() => go(position + off)}
                   aria-label={name}
-                  tabIndex={d > RANGE ? -1 : 0}
+                  tabIndex={far ? -1 : 0}
                 />
               )}
             </div>
@@ -110,10 +107,10 @@ export default function Coverflow({ items, detailBase, loop = false, storageKey 
 
         {count > 1 && (
           <>
-            <button type="button" className="cf-arrow cf-prev" onClick={() => go(current - 1)} disabled={!loop && current === 0} aria-label="Previous">
+            <button type="button" className="cf-arrow cf-prev" onClick={() => go(position - 1)} disabled={!loop && position === 0} aria-label="Previous">
               <FaChevronLeft />
             </button>
-            <button type="button" className="cf-arrow cf-next" onClick={() => go(current + 1)} disabled={!loop && current === count - 1} aria-label="Next">
+            <button type="button" className="cf-arrow cf-next" onClick={() => go(position + 1)} disabled={!loop && position === count - 1} aria-label="Next">
               <FaChevronRight />
             </button>
           </>
