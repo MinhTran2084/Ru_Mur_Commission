@@ -19,7 +19,7 @@ export default function Footer() {
         <li>
           {/* TODO: copy the real email from the Carrd page */}
           <a href="mailto:email@example.com" aria-label="Email">
-            <FaRegEnvelope />
+            <FaRegEnvelope className="footer-envelope" />
           </a>
         </li>
         <li>

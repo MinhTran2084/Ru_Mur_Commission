@@ -44,17 +44,16 @@ img { max-width: 100%; }
 }
 .logo { grid-area: logo; justify-self: start; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(1.4rem, 3vw, 2.2rem); letter-spacing: -0.02em; color: var(--crimson); text-decoration: none; }
 
-.main-nav { grid-area: nav; display: flex; gap: clamp(0.25rem, 2vw, 2rem); }
-.main-nav a { position: relative; padding: 0.45rem 1.1rem; border-radius: 999px; color: var(--ink); font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.02em; text-decoration: none; transition: background 0.2s; }
+.main-nav { position: relative; grid-area: nav; justify-self: center; display: flex; gap: clamp(0.25rem, 2vw, 2rem); }
+.main-nav a { position: relative; z-index: 1; padding: 0.45rem 1.1rem; border-radius: 999px; color: var(--ink); font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.02em; text-decoration: none; transition: background 0.2s; }
 .main-nav a:hover { background: rgba(228, 244, 243, 0.7); }
-.main-nav a.active { background: var(--mint); }
+.main-nav a.active { background: transparent; }
 .nav-tos-wrap { position: relative; display: flex; }
 .must-read { position: absolute; top: -0.7rem; left: 50%; z-index: 3; transform: translateX(-50%); color: var(--crimson); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; pointer-events: none; transition: opacity 0.25s ease; }
 .must-read.is-hidden { opacity: 0; }
 
-.sub-nav { grid-area: sub; justify-self: center; display: flex; gap: clamp(1rem, 3vw, 3rem); margin-top: 0.35rem; }
+.sub-nav { position: relative; grid-area: sub; justify-self: center; display: flex; gap: clamp(1rem, 3vw, 3rem); margin-top: 0.35rem; }
 .sub-nav a { padding: 0.3rem 0.25rem 0.45rem; border-bottom: 4px solid transparent; border-radius: 2px; color: var(--ink); text-decoration: none; }
-.sub-nav a.active { border-bottom-color: var(--teal); }
 
 .header-right { grid-area: right; justify-self: end; display: flex; align-items: center; gap: 1rem; }
 .lang-toggle { position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; border: 2px solid var(--crimson); border-radius: 999px; overflow: hidden; }
@@ -93,7 +92,7 @@ img { max-width: 100%; }
 .price-head { display: flex; flex-direction: column; align-items: flex-end; }
 .price-col ul { list-style: none; margin: 0; padding: 0; }
 .price-col li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: 0.4rem 1rem; }
-.price-item { font-size: 1.15rem; overflow-wrap: anywhere; }
+.price-item { font-size: clamp(0.95rem, 1.1vw + 0.1rem, 1.15rem); overflow-wrap: anywhere; text-wrap: balance; }
 .pill { background: var(--mint); border-radius: 999px; padding: 0.15rem 1.1rem; font-size: 1.15rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .pill-soon { background: transparent; border: 2px dashed var(--teal); color: var(--teal-dark); padding: 0.05rem 1rem; }
 .price-unit { margin-bottom: 0.1rem; font-size: 0.8rem; font-weight: 500; line-height: 1; letter-spacing: 0.03em; color: var(--teal-dark); }
@@ -289,8 +288,11 @@ img { max-width: 100%; }
 
 /* ---------- footer ---------- */
 .site-footer { padding: 2rem 1rem 2.5rem; }
-.site-footer ul { list-style: none; display: flex; justify-content: center; gap: clamp(1.5rem, 5vw, 3.5rem); margin: 0; padding: 0; }
-.site-footer a { display: inline-grid; color: var(--crimson); font-size: 2.1rem; transition: transform 0.2s; }
+.site-footer ul { list-style: none; display: flex; justify-content: center; align-items: flex-end; gap: clamp(1.5rem, 5vw, 3.5rem); margin: 0; padding: 0; }
+.site-footer li { display: flex; line-height: 0; }
+.site-footer a { display: flex; color: var(--crimson); font-size: 2.1rem; transition: transform 0.2s; }
+/* the envelope glyph is shorter than the others: move it down so all four bottoms sit on one line */
+.footer-envelope { transform: translateY(0.0625em); }
 .site-footer a:hover { transform: translateY(-3px) scale(1.08); }
 
 /* ---------- phones and small screens ---------- */
@@ -429,3 +431,38 @@ a, button { -webkit-tap-highlight-color: transparent; }
 }
 
 .coffee-icon { transform: translateY(-0.02em); }
+
+
+/* sliding indicators: the pill behind the main nav and the line under the sub-nav */
+.nav-ink { position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+.nav-ink.is-on { opacity: 1; }
+.nav-ink.is-anim { transition: opacity 0.25s ease, transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), width 0.45s cubic-bezier(0.4, 0, 0.2, 1), height 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+.nav-pill { width: var(--iw); height: var(--ih); border-radius: 999px; background: var(--mint); transform: translate(var(--ix), var(--iy)); }
+.nav-line { top: auto; bottom: 0; width: var(--iw); height: 4px; border-radius: 2px; background: var(--teal); transform: translateX(var(--ix)); }
+@media (prefers-reduced-motion: reduce) { .nav-ink.is-anim { transition: opacity 0.25s ease; } }
+
+/* justified text in the terms cards and the brief tips */
+.terms-card li, .brief-tips li { text-align: justify; text-justify: inter-word; hyphens: auto; }
+
+/* same minimum width for every price pill, so "IB" (VIE) and "DM" (EN) lay out identically */
+.pill { min-width: 4rem; text-align: center; }
+
+/* pricelist: the Printing column (the one with long names) is wider than the other two */
+@media (min-width: 1100px) {
+  .price-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr) minmax(0, 0.85fr); }
+}
+
+/* equal slots: the middle tab sits exactly on the centre line (desktop only) */
+@media (min-width: 861px) {
+  .main-nav { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
+  .main-nav a { text-align: center; }
+  .nav-tos-wrap > a { flex: 1; }
+
+  /* sub-tabs: the gap (2 tabs) or the middle tab (3 tabs) sits on the centre line */
+  .sub-nav { display: grid; grid-template-columns: 1fr 1fr; }
+  .sub-nav a:nth-of-type(1) { justify-self: end; }
+  .sub-nav a:nth-of-type(2) { justify-self: start; }
+  .sub-nav:has(a:nth-of-type(3)) { grid-template-columns: 1fr auto 1fr; }
+  .sub-nav:has(a:nth-of-type(3)) a:nth-of-type(2) { justify-self: center; }
+  .sub-nav:has(a:nth-of-type(3)) a:nth-of-type(3) { justify-self: start; }
+}

@@ -1,14 +1,22 @@
 import { useLang } from '../lang.jsx'
-import { ui, priceTitles, priceItems } from '../data/ui'
+import { ui, priceTitles, priceItems, priceValues } from '../data/ui'
 
-// Lets long names like "Keyring/Badge/Standee/Sticker..." wrap after each slash
+// Keeps anything in parentheses (like "(2 sides)") together on one line
+const keepTogether = (text) => text.replace(/\([^)]*\)/g, (m) => m.replace(/ /g, '\u00a0'))
+
+// Lets long names wrap after each slash
 const withBreaks = (text) =>
-  text.split('/').flatMap((part, i, parts) =>
-    i < parts.length - 1 ? [part + '/', <wbr key={i} />] : [part]
-  )
+  keepTogether(text)
+    .split('/')
+    .flatMap((part, i, parts) => (i < parts.length - 1 ? [part + '/', <wbr key={i} />] : [part]))
+
+const isSoon = (price) => /soon/i.test(price)
 
 export default function PriceTable({ title, rows }) {
   const { pick } = useLang()
+
+  // "coming soon" rows always go last
+  const ordered = [...rows.filter(([, p]) => !isSoon(p)), ...rows.filter(([, p]) => isSoon(p))]
 
   return (
     <section className="price-col">
@@ -20,14 +28,13 @@ export default function PriceTable({ title, rows }) {
         </span>
       </h2>
       <ul>
-        {rows.map(([item, price]) => {
-          const soon = /soon/i.test(price)
+        {ordered.map(([item, price]) => {
+          const soon = isSoon(price)
+          const shown = soon ? pick(ui.comingSoon) : pick(priceValues[price]) ?? price
           return (
             <li key={item}>
               <span className="price-item">{withBreaks(pick(priceItems[item]) ?? item)}</span>
-              <span className={soon ? 'pill pill-soon' : 'pill'}>
-                {soon ? pick(ui.comingSoon) : price}
-              </span>
+              <span className={soon ? 'pill pill-soon' : 'pill'}>{shown}</span>
             </li>
           )
         })}

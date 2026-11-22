@@ -37,3 +37,8 @@ export const priceItems = {
   'LED tĩnh': { vi: 'LED tĩnh', en: 'Static LED' },
   'LED động': { vi: 'LED động', en: 'Animated LED' },
 }
+
+// Prices that are words, not numbers (written as in pricing.js).
+export const priceValues = {
+  DM: { vi: 'IB', en: 'DM' },
+}
