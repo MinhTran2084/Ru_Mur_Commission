@@ -2,7 +2,13 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 const LangContext = createContext({ lang: 'vi', setLang: () => {}, pick: (v) => v })
 
+// The showcase board opens the site with ?showcase: it always shows English there,
+// and never saves the language, so the real site's saved choice is not touched.
+const showcaseMode =
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('showcase')
+
 function readStored() {
+  if (showcaseMode) return 'en'
   try {
     return localStorage.getItem('lang') === 'en' ? 'en' : 'vi'
   } catch {
@@ -15,6 +21,7 @@ export function LangProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.lang = lang
+    if (showcaseMode) return
     try {
       localStorage.setItem('lang', lang)
     } catch {
