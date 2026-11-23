@@ -687,3 +687,9 @@ a, button { -webkit-tap-highlight-color: transparent; }
     justify-content: center;
   }
 }
+
+/* showcase board: hide the artwork so the frames show the clean placeholder look */
+.is-showcase .cf-slide :is(img, video),
+.is-showcase .stage-view :is(img, video),
+.is-showcase .stage-thumb :is(img, video),
+.is-showcase .home-image :is(img, video) { visibility: hidden; }

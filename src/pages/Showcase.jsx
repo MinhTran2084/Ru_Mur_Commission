@@ -1,6 +1,6 @@
 import { personal } from '../data/gallery'
 
-const BASE = import.meta.env.BASE_URL
+const BASE = `${import.meta.env.BASE_URL}?showcase`
 
 // small labels above each screen: true = shown, false = hidden
 const SHOW_LABELS = false

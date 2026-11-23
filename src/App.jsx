@@ -16,6 +16,11 @@ import Brand from './pages/Brand'
 //const SHOWCASE = import.meta.env.DEV
 const SHOWCASE = true
 
+// The showcase board opens the site with ?showcase: images stay hidden there (placeholder look),
+// while the real site keeps showing them.
+if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('showcase')) {
+  document.documentElement.classList.add('is-showcase')
+}
 
 const isProjectPage = (path) => path.startsWith('/gallery/personal/')
 
