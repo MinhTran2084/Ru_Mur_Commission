@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import Backdrop from './components/Backdrop'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -8,6 +9,11 @@ import Tos from './pages/Tos'
 import GalleryPage from './pages/GalleryPage'
 import PersonalDetail from './pages/PersonalDetail'
 import Donate from './pages/Donate'
+import Showcase from './pages/Showcase'
+import Brand from './pages/Brand'
+
+// The showcase and brand boards only exist in local development. Change this to true to publish them.
+const SHOWCASE = import.meta.env.DEV
 
 const isProjectPage = (path) => path.startsWith('/gallery/personal/')
 
@@ -26,9 +32,19 @@ function ScrollToTop() {
   return null
 }
 
+// pages that are allowed to scroll like a normal web page (long text): only the terms
+const scrollsNormally = (path) => path.startsWith('/tos/terms')
+
 function App() {
+  const { pathname } = useLocation()
+
+  // dev-only boards: their own full-screen pages, without the site header, footer and backdrop
+  if (SHOWCASE && pathname === '/showcase') return <Showcase />
+  if (SHOWCASE && pathname === '/brand') return <Brand />
+
   return (
-    <div className="app">
+    <div className={scrollsNormally(pathname) ? 'app' : 'app fit'}>
+      <Backdrop />
       <ScrollToTop />
       <Header />
       <main>
