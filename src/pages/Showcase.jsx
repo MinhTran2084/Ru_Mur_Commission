@@ -1,5 +1,3 @@
-import { personal } from '../data/gallery'
-
 const BASE = `${import.meta.env.BASE_URL}?showcase`
 
 // small labels above each screen: true = shown, false = hidden
@@ -59,7 +57,7 @@ function Phone({ label, hash }) {
 }
 
 export default function Showcase() {
-  const project = personal[0]?.slug ?? 'demo-personal-1'
+  const project = 'demo-personal-1' // the frames show the dummy projects, see src/data/gallery.js
   const D = { w: 1440, h: 900 } // desktop window size
 
   return (

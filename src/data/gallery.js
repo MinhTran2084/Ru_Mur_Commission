@@ -94,8 +94,13 @@ const demo = (prefix) =>
     demo: true,
   }))
 
+// The showcase board opens the site with ?showcase: it always shows the dummy projects,
+// while the real site shows the real ones.
+const showcaseMode =
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('showcase')
+
 const sampleList = load('sample')
 const personalList = load('personal')
 
-export const sample = sampleList.length ? sampleList : demo('demo-sample')
-export const personal = personalList.length ? personalList : demo('demo-personal')
+export const sample = showcaseMode || !sampleList.length ? demo('demo-sample') : sampleList
+export const personal = showcaseMode || !personalList.length ? demo('demo-personal') : personalList
