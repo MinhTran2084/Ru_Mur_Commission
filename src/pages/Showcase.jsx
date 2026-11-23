@@ -22,7 +22,7 @@ function Frame({ label, hash, w, h, k, wide }) {
     </figure>
   )
 }
-
+//meo
 const PHONE = { w: 390, h: 844, bar: 47, k: 0.55 } // screen size, status bar height, scale
 
 // An iPhone-style frame around the real site.
