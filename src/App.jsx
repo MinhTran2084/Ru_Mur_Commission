@@ -13,7 +13,9 @@ import Showcase from './pages/Showcase'
 import Brand from './pages/Brand'
 
 // The showcase and brand boards only exist in local development. Change this to true to publish them.
-// const SHOWCASE = import.meta.env.DEV
+//const SHOWCASE = import.meta.env.DEV
+const SHOWCASE = true
+
 
 const isProjectPage = (path) => path.startsWith('/gallery/personal/')
 
