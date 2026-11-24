@@ -922,3 +922,100 @@ a, button { -webkit-tap-highlight-color: transparent; }
   color: #fff;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);  /* keeps the white readable on light artwork */
 }
+
+/* glass rim: thinner everywhere (Book now and the pink arrows) */
+.btn-book,
+.btn-book:hover,
+.pj-arrow,
+.pj-arrow:hover { border-width: 2.5px; }
+
+/* the white glass arrows (gallery and stage), a bit thinner too */
+.cf-arrow,
+.stage-arrow { border-width: 1.5px; }
+
+/* phones: smaller arrows */
+@media (max-width: 860px) {
+  .pj-arrow { width: 2.5rem; height: 2.5rem; font-size: 1.05rem; }
+  .stage-arrow { width: 2.2rem; height: 2.2rem; font-size: 1rem; }
+}
+
+/* ---------- project detail: sliding highlight, soft image surround, bigger image on phones ---------- */
+
+/* the selected step no longer draws its own box; the sliding highlight does */
+.stage.is-active,
+.stage.is-active:hover {
+  position: relative;
+  z-index: 1;
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.stage { position: relative; z-index: 1; }
+
+/* the highlight: the same glass as before, but it moves */
+.stage-hl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0.25rem;
+  z-index: 0;
+  height: var(--hh, 0);
+  transform: translateY(var(--hy, 0));
+  border-radius: 16px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 6px 16px rgba(30, 60, 130, 0.14);
+}
+.stage-hl.is-on { opacity: 1; }
+.stage-hl.is-anim {
+  transition:
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-hl.is-anim { transition: none; }
+}
+
+/* the image area: no hard teal box. The teal sits behind the image and fades out into the card */
+.stage-view { background: none; overflow: visible; }
+.stage-view::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 18px;
+  background: radial-gradient(
+    ellipse 75% 85% at 50% 50%,
+    rgba(150, 213, 209, 0.95) 0%,
+    rgba(150, 213, 209, 0.7) 45%,
+    rgba(150, 213, 209, 0) 100%
+  );
+}
+.stage-view > :not(.stage-arrow) { position: relative; z-index: 1; }
+.stage-arrow { z-index: 2; }
+
+/* phones: less padding around the image, and a taller picture area */
+@media (max-width: 860px) {
+  .detail-page { padding-inline: 0.6rem; }
+  .detail-main { padding: 0.75rem 0.75rem 1.25rem; }
+  .stage-view { aspect-ratio: 4 / 3; }
+}
+
+/* no teal default behind the big image or the thumbnails */
+.stage-view { background: none; overflow: hidden; }
+.stage-view::before { content: none; }
+.stage-thumb { background: none; }
+
+/* every thumbnail is the same size: the text column may shrink and long words break */
+.stage { grid-template-columns: minmax(110px, 40%) minmax(0, 1fr); }
+.stage-text { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  .stage { grid-template-columns: minmax(90px, 36%) minmax(0, 1fr); }
+}

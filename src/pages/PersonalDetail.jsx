@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { FaArrowLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import { personal } from '../data/gallery'
@@ -23,6 +23,10 @@ export default function PersonalDetail() {
   const listRef = useRef(null)
   const index = Math.min(sel, Math.max(count - 1, 0))
 
+  // the sliding highlight behind the selected step: where it is and how tall
+  const [hl, setHl] = useState(null)
+  const [anim, setAnim] = useState(false)
+
   useEffect(() => {
     setSel(0)
   }, [slug])
@@ -40,6 +44,31 @@ export default function PersonalDetail() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [count])
+
+  // measure the selected step, and again whenever any step changes size (language, window width)
+  useLayoutEffect(() => {
+    const list = listRef.current
+    if (!list) return
+    const steps = [...list.children].filter((c) => !c.classList.contains('stage-hl'))
+    const measure = () => {
+      const el = steps[index]
+      if (!el) return
+      const top = el.offsetTop
+      const height = el.offsetHeight
+      setHl((p) => (p && p.top === top && p.height === height ? p : { top, height }))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    steps.forEach((s) => ro.observe(s))
+    return () => ro.disconnect()
+  }, [index, slug, count])
+
+  // the first position is set without animation; every move after that slides
+  useEffect(() => {
+    if (!hl || anim) return
+    const id = requestAnimationFrame(() => setAnim(true))
+    return () => cancelAnimationFrame(id)
+  }, [hl, anim])
 
   // keep the selected stage visible inside the scrolling list
   useEffect(() => {
@@ -136,6 +165,12 @@ export default function PersonalDetail() {
                     </button>
                   </li>
                 ))}
+                {/* the glass highlight that slides to the selected step (keep this last) */}
+                <li
+                  className={`stage-hl${hl ? ' is-on' : ''}${anim ? ' is-anim' : ''}`}
+                  style={hl ? { '--hy': `${hl.top}px`, '--hh': `${hl.height}px` } : undefined}
+                  aria-hidden="true"
+                />
               </ul>
             </div>
           </aside>

@@ -1,5 +1,5 @@
 // Single-layer frosted #C21E62 pink glass footer icons with refined white details and a luminous rim.
-// All four sit on the same bottom baseline (y = 21.5 in the 24 x 24 drawing box).
+// All four icons are optically centered on y = 12 in the 24 x 24 drawing box so they sit level.
 
 const SHADOW = 'drop-shadow(0 3px 6px rgba(194, 30, 98, 0.28))'
 
@@ -80,7 +80,7 @@ export function ThreadsIcon(props) {
   return (
     <GlassIcon
       {...props}
-      shape={<circle cx="12" cy="12" r="9.5" />}
+      shape={<circle cx="12" cy="12" r="10.1" />}
       front={
         <g transform="translate(6.18 5.34) scale(0.026)">
           <path
@@ -100,10 +100,10 @@ export function MailIcon(props) {
   return (
     <GlassIcon
       {...props}
-      shape={<rect x="2.5" y="7" width="19" height="14.5" rx="3.5" />}
+      shape={<rect x="2.5" y="4.25" width="19" height="15.5" rx="3.8" />}
       front={
         <path
-          d="M4.2 9.2L12 14.6l7.8-5.4"
+          d="M4.2 6.55L12 12.25l7.8-5.7"
           fill="none"
           stroke="#ffffff"
           strokeWidth="1.4"
@@ -116,9 +116,9 @@ export function MailIcon(props) {
 }
 
 export function CoffeeIcon(props) {
-  // Larger mug body (x = 2..16.6, y = 6..21.5) + handle (to x = 22) to match the optical height of the other icons
+  // Centered on y = 12 (y = 4.25..19.75) to match the exact height and vertical alignment of MailIcon
   const mugPath =
-    'M2 6H16.6V8.4H18.2A3.8 3.8 0 0 1 22 12.2A3.8 3.8 0 0 1 18.2 16H16.6A5.5 5.5 0 0 1 11.1 21.5H7.5A5.5 5.5 0 0 1 2 16ZM16.6 10.3V14.1H18.2A1.9 1.9 0 0 0 18.2 10.3Z'
+    'M2 4.25H16.6V6.65H18.2A3.8 3.8 0 0 1 22 10.45A3.8 3.8 0 0 1 18.2 14.25H16.6A5.5 5.5 0 0 1 11.1 19.75H7.5A5.5 5.5 0 0 1 2 14.25ZM16.6 8.55V12.35H18.2A1.9 1.9 0 0 0 18.2 8.55Z'
 
   return (
     <svg
@@ -135,7 +135,7 @@ export function CoffeeIcon(props) {
       <path d={mugPath} fill="url(#gi-frost-base)" />
       <path d={mugPath} fill="url(#gi-frost-sheen)" stroke="url(#gi-rim)" strokeWidth="0.9" />
 
-      {/* 2. Thinner white tea bag string & chamfered tag */}
+      {/* 2. White tea bag string & chamfered tag */}
       <g
         fill="none"
         stroke="#ffffff"
@@ -143,8 +143,8 @@ export function CoffeeIcon(props) {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M6.4 6.6v2.8" />
-        <path d="M5.45 9.4h1.9l1.25 1.4v4.4H4.2v-4.4l1.25-1.4Z" />
+        <path d="M6.4 4.85v2.8" />
+        <path d="M5.45 7.65h1.9l1.25 1.4v4.4H4.2v-4.4l1.25-1.4Z" />
       </g>
     </svg>
   )
