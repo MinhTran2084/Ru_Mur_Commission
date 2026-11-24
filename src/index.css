@@ -693,3 +693,208 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .is-showcase .stage-view :is(img, video),
 .is-showcase .stage-thumb :is(img, video),
 .is-showcase .home-image :is(img, video) { visibility: hidden; }
+
+/* ---------- liquid glass (try-out: delete this whole block to go back) ---------- */
+
+/* the glass itself: frosted, see-through, with a bright top edge and a soft shadow */
+.card,
+.terms-card,
+.price-grid,
+.brief-template,
+.stage.is-active,
+.lang-toggle,
+.nav-pill {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.24));
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+    0 12px 32px rgba(30, 60, 130, 0.18);
+}
+
+/* small pieces: a lighter version of the same glass */
+.pill,
+.tags li,
+.price-notes {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.3));
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(30, 60, 130, 0.12);
+}
+.tags-dark li {
+  background: linear-gradient(135deg, rgba(150, 213, 209, 0.7), rgba(150, 213, 209, 0.35));
+}
+.pill-soon { background: rgba(255, 255, 255, 0.2); box-shadow: none; }
+
+/* back button, arrows and the stage list keep their own look, with glass behind */
+.back-pill { background: rgba(255, 255, 255, 0.55); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.stage:hover { background: rgba(255, 255, 255, 0.35); }
+
+/* pieces that should not become glass */
+.price-grid { border-radius: 28px; padding: 1.5rem clamp(1.25rem, 3vw, 2.5rem); }
+.timeline { background: none; box-shadow: none; border: 0; }
+.nav-pill { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 14px rgba(30, 60, 130, 0.14); }
+
+/* text on glass stays dark; the notes under the prices need a bit more contrast */
+.price-notes { padding: 0.6rem 1.5rem; border-radius: 20px; color: #3f4f4f; }
+
+/* browsers without blur, or people who asked for less transparency: plain white panels */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, .terms-card, .price-grid, .brief-template { background: rgba(255, 255, 255, 0.85); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .card, .terms-card, .price-grid, .brief-template, .pill, .tags li, .price-notes { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+@media (max-width: 860px) {
+  .price-grid { padding: 1rem; border-radius: 22px; }
+}
+
+/* ---------- glass buttons: rim, crisp inner edge, soft core, end halos ---------- */
+:root {
+  --btn-core: #d0286f;   /* the soft centre glow */
+  --btn-mid: #e0508f;
+  --btn-edge: #f08ab5;   /* where the core fades out, next to the rim */
+  --btn-rim-top: #fcc6dc; /* rim, top edge */
+  --btn-rim-bot: #f27fab; /* rim, bottom edge */
+}
+
+.btn-book,
+.pj-arrow {
+  border: 3px solid transparent;
+  color: #fff;
+  text-shadow: none;
+  background:
+    /* inner surface: soft horizontal oval, deep in the middle */
+    radial-gradient(ellipse 58% 95% at 50% 50%, var(--btn-core) 0%, var(--btn-mid) 52%, var(--btn-edge) 100%) padding-box,
+    /* rim: lighter at the top */
+    linear-gradient(180deg, var(--btn-rim-top), var(--btn-rim-bot)) border-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 140, 180, 0.7),      /* crisp inner edge */
+    inset 0 0 10px rgba(255, 255, 255, 0.28),      /* soft light inside the edge */
+    -5px 0 9px -3px rgba(255, 255, 255, 0.75),     /* white haze, left end */
+    5px 0 9px -3px rgba(255, 255, 255, 0.75),      /* white haze, right end */
+    0 8px 20px rgba(205, 34, 104, 0.28);           /* soft shadow below */
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-book:hover,
+.pj-arrow:hover {
+  filter: brightness(1.06) saturate(1.08);
+  background:
+    radial-gradient(ellipse 58% 95% at 50% 50%, var(--btn-core) 0%, var(--btn-mid) 52%, var(--btn-edge) 100%) padding-box,
+    linear-gradient(180deg, var(--btn-rim-top), var(--btn-rim-bot)) border-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 140, 180, 0.8),
+    inset 0 0 12px rgba(255, 255, 255, 0.34),
+    -6px 0 11px -3px rgba(255, 255, 255, 0.85),
+    6px 0 11px -3px rgba(255, 255, 255, 0.85),
+    0 10px 26px rgba(205, 34, 104, 0.38);
+}
+.btn-book:active,
+.pj-arrow:active { transform: scale(0.97); }
+@media (hover: none) {
+  .btn-book:hover,
+  .pj-arrow:hover {
+    filter: none;
+    background:
+      radial-gradient(ellipse 58% 95% at 50% 50%, var(--btn-core) 0%, var(--btn-mid) 52%, var(--btn-edge) 100%) padding-box,
+      linear-gradient(180deg, var(--btn-rim-top), var(--btn-rim-bot)) border-box;
+  }
+}
+
+/* arrows on the artwork and the hint pill: the same build in clear white glass */
+.cf-arrow,
+.stage-arrow,
+.cf-hint {
+  border: 2px solid transparent;
+  background:
+    radial-gradient(ellipse 58% 95% at 50% 50%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.8) 100%) padding-box,
+    linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(235, 244, 252, 0.9)) border-box;
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    inset 0 0 8px rgba(255, 255, 255, 0.7),
+    0 6px 16px rgba(30, 60, 130, 0.2);
+}
+
+/* the language switch: crimson thumb in the same build */
+.lang-thumb {
+  background: radial-gradient(ellipse 58% 95% at 50% 50%, var(--btn-core) 0%, var(--btn-mid) 55%, var(--btn-edge) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 140, 180, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- glass buttons: rim turns white at the far left and right ends ---------- */
+:root {
+  --btn-bg:
+    /* inner surface */
+    radial-gradient(ellipse 58% 95% at 50% 50%, var(--btn-core) 0%, var(--btn-mid) 52%, var(--btn-edge) 100%) padding-box,
+    /* rim: white at both ends, clear in the middle */
+    linear-gradient(90deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.75) 9%,
+      rgba(255, 255, 255, 0) 28%,
+      rgba(255, 255, 255, 0) 72%,
+      rgba(255, 255, 255, 0.75) 91%,
+      rgba(255, 255, 255, 0.98) 100%) border-box,
+    /* rim: pink, lighter at the top */
+    linear-gradient(180deg, var(--btn-rim-top), var(--btn-rim-bot)) border-box;
+}
+
+.btn-book,
+.pj-arrow,
+.btn-book:hover,
+.pj-arrow:hover {
+  border-width: 4px;
+  background: var(--btn-bg);
+}
+@media (hover: none) {
+  .btn-book:hover,
+  .pj-arrow:hover { background: var(--btn-bg); }
+}
+
+
+
+/* glass inside a fading parent looks hollow until the fade ends: slide only, no fade */
+@keyframes rise-in {
+  from { transform: translateY(14px); }
+  to   { transform: none; }
+}
+
+/* the carousel caption holds glass tags, so it slides instead of fading too */
+@keyframes caption-in {
+  from { transform: translateY(8px); }
+  to   { transform: none; }
+}
+.cf-caption { animation-name: caption-in; }
+
+/* ---------- logo: same crimson-to-pink gradient as the buttons ---------- */
+.logo {
+  font-weight: 800; /* was 800: one step lighter */
+  background: linear-gradient(180deg, var(--btn-core) 0%, var(--btn-mid) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 3px 8px rgba(205, 34, 104, 0.22));
+}
+
+/* ---------- workflow: glass box behind the timeline ---------- */
+.timeline {
+  padding: 1.25rem clamp(1.5rem, 4vw, 3rem);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.3));
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 28px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+    0 12px 32px rgba(30, 60, 130, 0.18);
+}
+
+@media (max-width: 860px) {
+  .timeline { padding: 0.5rem 1rem; border-radius: 22px; }
+}
