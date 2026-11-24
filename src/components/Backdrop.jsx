@@ -1,9 +1,8 @@
 // ---- knobs you can change ----
 // Colours along the ribbon, from where it starts (right) to where it ends (bottom).
-// All three are the same softened aqua, so the ribbon is one colour all the way.
-const SHADES = ['#C6E7EE', '#C6E7EE', '#C6E7EE']
-// The same colour, a little deeper, used for the sharper parts so their edges show.
-const EDGE_SHADES = ['#BAE0EA', '#BAE0EA', '#BAE0EA']
+const SHADES = ['#C8EAFB', '#D0D9FC', '#BDEEF8'] // light sky blue, light periwinkle, light aqua
+// The same colours, a little deeper, used for the sharper parts so their edges show.
+const EDGE_SHADES = ['#B9E2F9', '#C7D1FA', '#B0E8F3']
 const WIDTH = 1 // thickness of the ribbon: 0.6 = thin, 1 = normal, 1.5 = thick
 const SOFT = 1 // softness of the blended parts: 0.6 = more defined, 1 = soft, 1.5 = very soft
 const EDGE = 8 // how crisp the sharper parts are, in px of blur: 4 = very crisp, 8 = defined, 14 = soft
