@@ -905,9 +905,9 @@ a, button { -webkit-tap-highlight-color: transparent; }
   .timeline { padding: 0.5rem 1rem; border-radius: 22px; }
 }
 
-/* glass footer icons: bigger */
-.site-footer a { font-size: 2.8rem; }
-.app.fit .site-footer a { font-size: 2.2rem; }
+/* glass footer icons: one size on every page */
+.site-footer a,
+.app.fit .site-footer a { font-size: 2.4rem; }
 
 /* "tap for more details" pill: liquid glass with white text */
 .cf-hint {
