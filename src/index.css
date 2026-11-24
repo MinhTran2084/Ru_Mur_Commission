@@ -850,6 +850,12 @@ a, button { -webkit-tap-highlight-color: transparent; }
   border-width: 4px;
   background: var(--btn-bg);
 }
+
+/* Book now: a tiny bit thinner rim than the arrows */
+.btn-book,
+.btn-book:hover {
+  border-width: 3px;
+}
 @media (hover: none) {
   .btn-book:hover,
   .pj-arrow:hover { background: var(--btn-bg); }
@@ -897,4 +903,22 @@ a, button { -webkit-tap-highlight-color: transparent; }
 
 @media (max-width: 860px) {
   .timeline { padding: 0.5rem 1rem; border-radius: 22px; }
+}
+
+/* glass footer icons: bigger */
+.site-footer a { font-size: 2.8rem; }
+.app.fit .site-footer a { font-size: 2.2rem; }
+
+/* "tap for more details" pill: liquid glass with white text */
+.cf-hint {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.1));
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),   /* bright top edge */
+    inset 0 -1px 0 rgba(255, 255, 255, 0.3),   /* faint bottom edge */
+    0 6px 18px rgba(30, 60, 130, 0.22);        /* soft shadow below */
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);  /* keeps the white readable on light artwork */
 }
