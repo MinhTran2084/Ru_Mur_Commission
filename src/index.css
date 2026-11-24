@@ -1019,3 +1019,35 @@ a, button { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 700px) {
   .stage { grid-template-columns: minmax(90px, 36%) minmax(0, 1fr); }
 }
+
+/* ---------- big image: slides left and right ---------- */
+
+/* each image sits on its own layer, filling the picture area */
+.stage-view > .stage-slide {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+/* the slide replaces the old fade */
+.stage-view img,
+.stage-view video { animation: none; }
+.stage-view .stage-arrow { z-index: 5; }
+
+.stage-slide.from-right { animation-name: slide-from-right; }
+.stage-slide.from-left { animation-name: slide-from-left; }
+.stage-slide.is-leaving { pointer-events: none; }
+.stage-slide.to-left { animation-name: slide-to-left; }
+.stage-slide.to-right { animation-name: slide-to-right; }
+
+@keyframes slide-from-right { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes slide-from-left  { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes slide-to-left    { from { transform: none; } to { transform: translateX(-100%); } }
+@keyframes slide-to-right   { from { transform: none; } to { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-view > .stage-slide { animation: none; }
+  .stage-slide.is-leaving { display: none; }
+}

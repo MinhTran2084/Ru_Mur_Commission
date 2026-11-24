@@ -27,6 +27,12 @@ export default function PersonalDetail() {
   const [hl, setHl] = useState(null)
   const [anim, setAnim] = useState(false)
 
+  // the big image slides: dir 1 = next (new one comes from the right), -1 = previous, 0 = no slide
+  const prevIdx = useRef(index)
+  const prevSlug = useRef(slug)
+  const [dir, setDir] = useState(0)
+  const [leave, setLeave] = useState(null) // the image that is sliding out
+
   useEffect(() => {
     setSel(0)
   }, [slug])
@@ -44,6 +50,25 @@ export default function PersonalDetail() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [count])
+
+  // when the selected step changes: work out the direction and keep the old image for the slide-out
+  useLayoutEffect(() => {
+    if (prevSlug.current !== slug) {
+      prevSlug.current = slug
+      prevIdx.current = index
+      setDir(0)
+      setLeave(null)
+      return
+    }
+    if (prevIdx.current === index) return
+    const d = index > prevIdx.current ? 1 : -1
+    const old = stages[prevIdx.current]
+    setDir(d)
+    setLeave(old ? { image: old.image, key: `${slug}-${prevIdx.current}`, dir: d } : null)
+    prevIdx.current = index
+    const t = setTimeout(() => setLeave(null), 480)
+    return () => clearTimeout(t)
+  }, [index, slug])
 
   // measure the selected step, and again whenever any step changes size (language, window width)
   useLayoutEffect(() => {
@@ -127,6 +152,8 @@ export default function PersonalDetail() {
     if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1)
   }
 
+  const enterClass = dir === 0 ? '' : dir > 0 ? ' from-right' : ' from-left'
+
   return (
     <>
       <div className="page page-wide detail-page">
@@ -177,12 +204,20 @@ export default function PersonalDetail() {
 
           <section className="card detail-main">
             <div className="stage-view" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-              <Media
-                key={`${slug}-${index}`}
-                src={stage.image}
-                alt={pick(stage.title)}
-                controls={stage.controls === true}
-              />
+              {/* the image sliding out */}
+              {leave && (
+                <div
+                  key={leave.key}
+                  className={`stage-slide is-leaving ${leave.dir > 0 ? 'to-left' : 'to-right'}`}
+                  aria-hidden="true"
+                >
+                  <Media src={leave.image} play={false} />
+                </div>
+              )}
+              {/* the image sliding in */}
+              <div key={`${slug}-${index}`} className={`stage-slide${enterClass}`}>
+                <Media src={stage.image} alt={pick(stage.title)} controls={stage.controls === true} />
+              </div>
               <button type="button" className="stage-arrow stage-prev" onClick={() => go(-1)} disabled={index === 0} aria-label="Previous">
                 <FaChevronLeft />
               </button>
