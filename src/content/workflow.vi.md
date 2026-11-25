@@ -1,4 +1,4 @@
-1. Liên hệ đặt comm qua instagram hoặc threads.
+1. Liên hệ đặt commission qua Instagram hoặc Threads.
 2. Chốt brief và báo giá + deadline từng giai đoạn.
 3. **Cọc 70% để bắt đầu đơn.**
 4. Nhận bản demo và tiến hành feedback.
