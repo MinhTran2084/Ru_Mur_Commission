@@ -770,3 +770,12 @@ img { max-width: 100%; }
 .sc-btn-vol1 { left: -3px; top: 114px; height: 38px; }
 .sc-btn-vol2 { left: -3px; top: 162px; height: 38px; }
 .sc-btn-power { right: -3px; top: 132px; height: 66px; }
+
+/* make artwork harder to grab */
+img,
+video {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}

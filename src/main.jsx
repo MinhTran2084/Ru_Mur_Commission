@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import { LangProvider } from './lang.jsx'
+import { protectMedia } from './protectMedia';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -14,3 +15,5 @@ createRoot(document.getElementById('root')).render(
     </HashRouter>
   </StrictMode>,
 )
+
+protectMedia();
